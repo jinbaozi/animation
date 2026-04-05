@@ -7,5 +7,8 @@ review/
 # LLM usage plans and specs
 docs/superpowers/
 
+# Backup files
+*.bak
+
 # OS files
 .DS_Store
