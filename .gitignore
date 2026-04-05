@@ -1,0 +1,11 @@
+# Claude Code internal files
+.claude/
+
+# Review and intermediate files
+review/
+
+# LLM usage plans and specs
+docs/superpowers/
+
+# OS files
+.DS_Store
