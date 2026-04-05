@@ -16,6 +16,7 @@
 黑色长发及腰，自然垂落，身穿素雅白色长裙，
 腰间淡蓝色丝带，纤细单薄身形，站姿优雅，
 无阴影，纯白背景，高质量动画
+--no blurry, pixelated, low resolution, jpeg artifacts, watermark, text, logo, signature, extra limbs, mutated hands, bad anatomy, two heads, disfigured, multiple views, 2koma, 4koma
 ```
 
 ### 侧面全身
@@ -26,6 +27,7 @@
 黑色长发及腰侧面效果，身穿素雅白色长裙，
 腰间淡蓝色丝带，纤细身形侧面，站姿优雅，
 纯白背景，高质量动画
+--no blurry, pixelated, low resolution, jpeg artifacts, watermark, text, logo, signature, extra limbs, mutated hands, bad anatomy, two heads, disfigured, multiple views, 2koma, 4koma
 ```
 
 ### 背面全身
@@ -36,6 +38,7 @@
 素雅白色长裙背面，腰间淡蓝色丝带，
 纤细身形背影，站姿优雅，无阴影，
 纯白背景，高质量动画
+--no blurry, pixelated, low resolution, jpeg artifacts, watermark, text, logo, signature, extra limbs, mutated hands, bad anatomy, two heads, disfigured, multiple views, 2koma, 4koma
 ```
 
 ### 面部特写
@@ -46,6 +49,7 @@
 杏核眼，眼神忧郁带期待，高清面部细节，
 精致五官，嘴唇微微上扬，长发垂落两侧，
 无阴影，纯白背景，高质量动画
+--no blurry, pixelated, low resolution, jpeg artifacts, watermark, text, logo, signature, extra limbs, mutated hands, bad anatomy, two heads, disfigured, multiple views, 2koma, 4koma
 ```
 
 ---
@@ -60,6 +64,7 @@
 身穿黑金长袍，金色纹饰细节，气质高贵，
 身材挺拔，站姿威严，无阴影，
 纯白背景，高质量动画
+--no blurry, pixelated, low resolution, jpeg artifacts, watermark, text, logo, signature, extra limbs, mutated hands, bad anatomy, two heads, disfigured, multiple views, 2koma, 4koma
 ```
 
 ### 侧面全身
@@ -70,6 +75,7 @@
 身穿黑金长袍，金色纹饰侧面效果，
 身材挺拔，侧面轮廓分明，无阴影，
 纯白背景，高质量动画
+--no blurry, pixelated, low resolution, jpeg artifacts, watermark, text, logo, signature, extra limbs, mutated hands, bad anatomy, two heads, disfigured, multiple views, 2koma, 4koma
 ```
 
 ### 背面全身
@@ -79,6 +85,7 @@
 黑色长发垂落背影，身穿黑金长袍，
 金色纹饰背面，腰背挺直，气质威严，
 无阴影，纯白背景，高质量动画
+--no blurry, pixelated, low resolution, jpeg artifacts, watermark, text, logo, signature, extra limbs, mutated hands, bad anatomy, two heads, disfigured, multiple views, 2koma, 4koma
 ```
 
 ### 面部特写
@@ -88,6 +95,7 @@
 剑眉星目，深邃深情眼神，高清面部细节，
 五官精致，轮廓分明，嘴唇微带笑意，
 无阴影，纯白背景，高质量动画
+--no blurry, pixelated, low resolution, jpeg artifacts, watermark, text, logo, signature, extra limbs, mutated hands, bad anatomy, two heads, disfigured, multiple views, 2koma, 4koma
 ```
 
 ---
