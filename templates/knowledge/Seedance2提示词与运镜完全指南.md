@@ -22,7 +22,7 @@
 | **动作** | 动态行为/状态变化 | 动词-ing形式 | `walking slowly through the forest` |
 | **场景** | 空间背景 | 时间 + 地点 + 天气/光线 | `in a misty bamboo forest at dawn` |
 | **运镜** | 镜头语言 | 英文电影术语 | `slow dolly in, handheld` |
-| **风格** | 视觉质感 | 风格关键词 | `cinematic, film grain, 35mm` |
+| **风格** | 视觉质感 | 风格关键词 | `cinematic lighting, volumetric light, 8K resolution` |
 
 ---
 
@@ -224,7 +224,7 @@ A martial artist performing a spinning kick in mid-air,
 briskly and with power,
 dust particles swirling around,
 dynamic low angle shot,
-film grain, 35mm anamorphic,
+cinematic lighting, volumetric light beams,
 action movie style
 ```
 

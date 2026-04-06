@@ -622,9 +622,135 @@ Prompt写法：
 
 ---
 
-## 十二、版本历史
+## 十二、NotebookLM进阶查询补充（第二轮深度查询）
+
+### 12.1 口型同步规则（Lip-Sync）
+
+当角色在对话中不说话时，嘴巴必须保持自然状态，避免出现不自然的抖动：
+
+- **LivePortrait 工具**：启用 `lip_zero` 参数（阈值建议 0.03），抑制角色未说话时的非自然嘴部抖动
+- **Seedance 2.0 提示词**：明确描述非说话角色的嘴部状态
+  ```
+  对话中不说话的角色：mouth closed naturally, lips gently pressed together, no mouth movement
+  ```
+
+### 12.2 皮肤质感与真实感检查清单
+
+为了消除"AI塑料感"，让面部表情更有机真实，Prompt 中应包含以下生理细节：
+
+| 质感维度 | 英文Prompt写法 | 效果 |
+|---------|---------------|------|
+| 光线穿透皮肤 | `subsurface scattering on skin` | 真实皮肤透光感 |
+| 微妙纹理 | `visible micro-texture on face` | 非光滑塑料皮肤 |
+| 毛孔密度不均 | `uneven pore density across skin surface` | 增加真实度 |
+| 绒毛 | `faint peach fuzz on cheekbone` | 皮肤细节 |
+| 眼白自然色调 | `natural sclera tone with subtle blood vessels` | 不完美但真实的眼睛 |
+| 光学缺陷 | `film grain, slight lens flare` | 模拟真实相机 |
+| 色差/色散 | `chromatic aberration on edges` | 电影感镜头效果 |
+
+**效果对比：**
+```
+❌ 错误（塑料感）：
+  "She looked at him with beautiful clear blue eyes, smooth flawless skin"
+
+✅ 正确（有机真实感）：
+  "Her expression is neutral with subtle micro-movements. Visible micro-texture on her pale skin, faint peach fuzz on her cheekbones, natural sclera tone in her eyes, subsurface scattering from the warm backlight, subtle film grain throughout"
+```
+
+### 12.3 音频情感标签系统
+
+对于配音和口型同步音频（ElevenLabs），需要在剧本中加入情感标签：
+
+**音频情感标签格式：**
+```
+剧本格式：
+  "你要走了？" [whispers, voice trembling] 她问道。
+
+常用标签：
+  [laughs]        — 笑声
+  [whispers]      — 耳语
+  [sighs]         — 叹息
+  [crying]        — 哭泣
+  [gasps]         — 倒吸一口气
+  [chuckles]      — 轻笑
+```
+
+**配音工具设置（ElevenLabs / 类似工具）：**
+
+| 参数 | 推荐值 | 效果 |
+|------|--------|------|
+| Stability（稳定性） | 0.3-0.5（高情感） | 值越低声音越不稳定但更富变化，适合情感戏 |
+| Style Exaggeration（风格强化） | 10-15% | 值越高越戏剧化 |
+
+### 12.4 人物锁定技术进阶
+
+**Midjourney 角色一致性锁定：**
+
+| 场景 | 参数 | 说明 |
+|------|------|------|
+| 完全锁定（脸+发型+服装） | `--cref [角色URL] --cw 100` | 保持角色在所有镜头中外观一致 |
+| 仅锁定脸型（换衣服/换发型） | `--cref [角色URL] --cw 0` | 保持面部相似但允许改变服装或发型 |
+| 风格锁定 | `--sref [风格图URL]` | 统一全场景的色调和纹理 |
+
+**Seedance 2.0 + Midjourney 工作流推荐：**
+```
+1. Midjourney生成角色图: MJ -> --cref URL -> 生成角色标准图
+2. 上传种子帧图到Seedance: 使用角色标准图作为首帧输入
+3. 视频提示词专注于动态: 不再描述角色外观，只写动作+运镜+光影
+4. 统一光效: 所有镜头加入相同光影关键词
+```
+
+### 12.5 多角度空间一致性保障
+
+当涉及复杂相机运动时，为防止背景扭曲变形：
+
+**方法：预生成同一环境的四个角度**
+```
+环境角度生成清单：
+  □ 正面视角图 — 建立空间主体
+  □ 侧面视角图 — 确认侧方空间
+  □ 背面视角图 — 确认后方空间
+  □ 俯视视角图 — 确认平面关系
+
+使用这四张图喂给视频模型，能提供丰富的3D空间数据，
+保持环境在复杂镜头运动中的稳定性。
+```
+
+### 12.6 法律红线与版权保护
+
+**作品完整权保护（法律）：**
+对经典 IP 进行颠覆性篡改、"魔性"解构、恶搞或低俗化改编，违反了法律中的**"保护作品完整权"**（Right to Protect the Integrity of a Work）。
+
+**肖像权保护（法律）：**
+对历史人物、英模人物进行篡改，还侵犯了**肖像权**（Portrait Rights）。
+
+**版权保护建议：**
+```
+1. 所有最终 AI 内容必须在显眼位置标注"AI生成"水印
+2. 通过区块链时间戳提供提示词和参数日志作为版权证据
+3. 保留所有生成记录和版本迭代历史
+```
+
+### 12.7 音频长度限制
+
+对于使用 ElevenLabs 或其他 TTS 平台：
+- **超过4分钟**的音频：音量会逐渐衰减到接近无声
+- **解决法案**：将文本拆分为 **60秒或更短** 的片段（约 860 个单词），然后拼接起来
+
+### 12.8 Seedance 2.0 运动幅度参数总结
+
+| 设置 | 说明 | 推荐值 |
+|------|------|--------|
+| Motion Amplitude（运动幅度） | 控制画面动态变化程度 | **Medium** |
+| 太高会怎样 | 人物变形、画面崩坏、动作诡异 | 避免 |
+| 太低会怎样 | 静态如死水、缺乏动感和吸引力 | 避免 |
+| 运动不完美时 | **修改提示词降低幅度描述**，而非盲目重新生成 | 优先 |
+
+---
+
+## 十三、版本历史
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
 | v1.0 | 2026-04-05 | 首版发布，整合项目知识库 + Seedance2提示词与运镜完全指南 + Seedance2导演级运镜库 + 好莱坞剪辑语言 + 好莱坞光影体系 |
-| v2.0 | 2026-04-05 | 新增第11节"NotebookLM深度技巧"，实时查询知识库补充过肩镜头、移焦、微动作系统、图生视频垫图法、政策红线、Negative Prompt正确写法等 |
+| v2.0 | 2026-04-05 | 新增第11节"NotebookLM深度技巧"（第一轮实时查询：过肩镜头、移焦、微动作系统、图生视频垫图法、政策红线、Negative Prompt正确写法）**+ 新增第12节"进阶查询补充"（第二轮深度查询：口型同步、皮肤质感检查清單、音频情感标签、Midjourney角色锁定、多角度空间一致性、法律版权保护、音频长度限制）** |

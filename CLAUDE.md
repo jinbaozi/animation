@@ -51,10 +51,11 @@ animation-v3/
 │   ├── output目录结构规范.md # Output structure spec
 │   ├── 阻塞问题清单模板.md   # Block issue template
 │   └── execution/            # Phase execution guides
-│       ├── Phase0-品控合规官执行指令.md
-│       ├── Phase1-内容总导演执行指令.md
-│       ├── Phase1.5-镜头序列设计师执行指令.md
-│       └── Phase2-美术技术总监执行指令.md
+│       ├── Phase0-品控合规官/Phase0-主索引.md
+│       ├── Phase1-内容总导演/Phase1-主索引.md
+│       ├── Phase1.5-镜头序列设计师/Phase1.5-主索引.md
+│       ├── Phase2-美术技术总监/Phase2-主索引.md
+│       └── Phase3-审核智能体/Phase3-主索引.md
 │
 └── examples/                 # Example projects
     └── 01-完整示例/          # Complete end-to-end example
