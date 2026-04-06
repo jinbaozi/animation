@@ -62,12 +62,54 @@
 - D8 世界观合规：违禁词正则 + 世界观标签
 
 ### Phase 3: LLM细审
-- 规则引擎结果为"通过"：仅验证
-- 规则引擎结果为"疑问"：全维度细审
-- 规则引擎发现P0：直接输出P0报告
+
+**D1 人物一致性细审**
+加载 agents/audit/dimensions/01-character-consistency.md
+执行Step 1-4的详细提示词流程
+输出JSON格式审核结果
+
+**D2 场景一致性细审**
+加载 agents/audit/dimensions/02-scene-consistency.md
+执行Step 1-4的详细提示词流程
+输出JSON格式审核结果
+
+**D3 动作连贯性细审**
+加载 agents/audit/dimensions/03-action-coherence.md
+执行Step 1-4的详细提示词流程
+输出JSON格式审核结果
+
+**D4 剧情符合度细审**
+加载 agents/audit/dimensions/04-narrative-logic.md
+执行Step 1-4的详细提示词流程
+输出JSON格式审核结果
+
+**D5 表情精准度细审**
+加载 agents/audit/dimensions/05-expression-precision.md
+执行Step 1-4的详细提示词流程
+输出JSON格式审核结果
+
+**D6 对戏互动细审**
+加载 agents/audit/dimensions/06-dialogue-interaction.md
+执行Step 1-4的详细提示词流程
+输出JSON格式审核结果
+
+**D7 运镜专业度细审**
+加载 agents/audit/dimensions/07-cinematography.md
+执行Step 1-4的详细提示词流程
+输出JSON格式审核结果
+
+**D8 世界观合规细审**
+加载 agents/audit/dimensions/08-world-building.md
+执行Step 1-4的详细提示词流程
+输出JSON格式审核结果
+
+**评分汇总**
+- 汇总8维度评分（参考 agents/audit/templates/score-sheet.md）
+- 应用P0/P1降级规则
+- 计算综合评分
 
 ### Phase 4: 报告汇总
-1. 汇总8维度评分
+1. 汇总8维度评分（参考 agents/audit/templates/score-sheet.md）
 2. 按P0/P1/P2分级问题
 3. 生成修复建议
 4. 输出到review/目录
