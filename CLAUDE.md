@@ -58,6 +58,26 @@ animation-v3/
 │
 └── examples/                 # Example projects
     └── 01-完整示例/          # Complete end-to-end example
+│
+├── agents/                   # AI Agent definitions
+│   ├── audit-agent.md        # Audit agent orchestrator
+│   └── audit/
+│       ├── dimensions/       # 8 audit dimension modules
+│       │   ├── 01-character-consistency.md
+│       │   ├── 02-scene-consistency.md
+│       │   ├── 03-action-coherence.md
+│       │   ├── 04-narrative-logic.md
+│       │   ├── 05-expression-precision.md
+│       │   ├── 06-dialogue-interaction.md
+│       │   ├── 07-cinematography.md
+│       │   └── 08-world-building.md
+│       ├── templates/        # Audit report template
+│       │   └── audit-report.md
+│       └── rules/            # Audit rules engine
+│           └── audit-rules.md
+│
+└── scripts/                  # Automation scripts
+    └── audit-agent.sh        # Audit trigger script
 ```
 
 ## Architecture
