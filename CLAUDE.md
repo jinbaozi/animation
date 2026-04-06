@@ -49,20 +49,22 @@ animation-v3/
 │   ├── 编排师操作手册.md     # Orchestrator manual
 │   ├── 术语表.md             # Glossary
 │   ├── output目录结构规范.md # Output structure spec
-│   ├── 阻塞问题清单模板.md   # Block issue template
-│   └── execution/            # Phase execution guides
-│       ├── Phase0-品控合规官/Phase0-主索引.md
-│       ├── Phase1-内容总导演/Phase1-主索引.md
-│       ├── Phase1.5-镜头序列设计师/Phase1.5-主索引.md
-│       ├── Phase2-美术技术总监/Phase2-主索引.md
-│       └── Phase3-审核智能体/Phase3-主索引.md
+│   └── 阻塞问题清单模板.md   # Block issue template
 │
 └── examples/                 # Example projects
     └── 01-完整示例/          # Complete end-to-end example
 │
 ├── agents/                   # AI Agent definitions
-│   ├── audit-agent.md        # Audit agent orchestrator
-│   └── audit/
+│   ├── orchestrator/         # Orchestrator agent
+│   │   ├── orchestrator.md   # Main orchestrator role definition
+│   │   ├── compliance/       # Phase 0 execution docs
+│   │   ├── director/          # Phase 1 execution docs
+│   │   ├── shot-designer/    # Phase 1.5 execution docs
+│   │   ├── art-director/     # Phase 2 execution docs
+│   │   ├── Seedance2/        # Seedance 2.0 techniques
+│   │   └── execution/         # Shared execution docs
+│   └── audit/                # Audit agent
+│       ├── audit-agent.md    # Audit agent orchestrator
 │       ├── dimensions/       # 8 audit dimension modules
 │       │   ├── 01-character-consistency.md
 │       │   ├── 02-scene-consistency.md
@@ -177,13 +179,16 @@ Phase 0（品控合规官）→ Phase 1（内容总导演）→ Phase 1.5（镜�
 ### Path Conventions
 
 - Role files: Root directory (e.g., `01-AI内容总导演-角色职责规范.md`)
+- Orchestrator agent: `agents/orchestrator/`
+- Audit agent: `agents/audit/`
 - Rules: `rules/` directory
 - Templates: `templates/` directory
-- Execution docs: `docs/` directory
+- Execution docs: `agents/orchestrator/` (Phase-specific subdirectories)
 - Examples: `examples/` directory
 
 **Do NOT use**:
 - `01-角色/` (doesn't exist)
 - `02-基准模版/` (doesn't exist)
+- `docs/execution/` (migrated to `agents/orchestrator/`)
 
 See `docs/路径规范.md` for full path conventions.
