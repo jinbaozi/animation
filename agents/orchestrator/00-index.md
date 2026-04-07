@@ -81,11 +81,11 @@ Phase 0（品控合规官）→ Phase 1（内容总导演）→ Phase 1.5（镜�
 
 | 文档 | 位置 |
 |------|------|
-| Seedance2 基础理论 | `Seedance2/Seedance2-基础理论.md` |
-| Seedance2 禁止清单 | `Seedance2/Seedance2-禁止清单.md` |
-| Seedance2 模板示例 | `Seedance2/Seedance2-模板示例.md` |
-| Seedance2 NotebookLM补充 | `Seedance2/Seedance2-NotebookLM补充.md` |
-| Seedance2 提示词技巧大全 | `Seedance2/Seedance2提示词技巧大全.md` |
+| Seedance2 基础理论 | `rules/Seedance2/Seedance2-基础理论.md` |
+| Seedance2 禁止清单 | `rules/Seedance2/Seedance2-禁止清单.md` |
+| Seedance2 模板示例 | `rules/Seedance2/Seedance2-模板示例.md` |
+| Seedance2 NotebookLM补充 | `rules/Seedance2/Seedance2-NotebookLM补充.md` |
+| Seedance2 提示词技巧大全 | `rules/Seedance2/Seedance2提示词技巧大全.md` |
 
 ---
 
