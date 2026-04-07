@@ -243,6 +243,6 @@ Phase 0（品控合规官）→ Phase 1（内容总导演）→ Phase 1.5（镜�
 - `01-角色/` (doesn't exist)
 - `02-基准模版/` (doesn't exist)
 - `docs/execution/` (migrated to `agents/orchestrator/`)
-- `rules/Seedance2/` (migrated to `agents/orchestrator/Seedance2/`)
+- `agents/orchestrator/Seedance2/` (migrated to `rules/Seedance2/`)
 
 See `docs/路径规范.md` for full path conventions.
