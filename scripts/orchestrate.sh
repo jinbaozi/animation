@@ -18,6 +18,8 @@ PROJECT=""
 NOVEL=""
 WATCH_MODE=false
 PHASE=""
+RETRY_COUNT=3
+RETRY_DELAY=5
 
 # 解析参数
 while [[ $# -gt 0 ]]; do
@@ -101,6 +103,32 @@ print_error() {
   echo -e "${RED}[ERROR]${NC} $1"
 }
 
+# 执行Claude Code命令（带重试）
+run_claude() {
+  local TASK="$1"
+  local PHASE_NAME="$2"
+  local ATTEMPT=1
+
+  while [ $ATTEMPT -le $RETRY_COUNT ]; do
+    echo -e "${YELLOW}[RETRY $ATTEMPT/$RETRY_COUNT]${NC} 执行 $PHASE_NAME..."
+
+    if claude -p "$TASK" --output-format stream 2>&1; then
+      echo -e "${GREEN}[SUCCESS]${NC} $PHASE_NAME 执行成功"
+      return 0
+    else
+      if [ $ATTEMPT -lt $RETRY_COUNT ]; then
+        local DELAY=$((RETRY_DELAY * 2 ** (ATTEMPT - 1)))
+        echo -e "${YELLOW}[RETRY]${NC} $PHASE_NAME 失败，${DELAY}秒后重试..."
+        sleep $DELAY
+      fi
+      ATTEMPT=$((ATTEMPT + 1))
+    fi
+  done
+
+  echo -e "${RED}[FAILED]${NC} $PHASE_NAME 执行失败（已重试 $RETRY_COUNT 次）"
+  return 1
+}
+
 # Phase 0: 品控合规官
 run_phase0() {
   print_status "Phase 0" "品控合规官 - 合规预审"
@@ -124,8 +152,48 @@ run_phase0() {
   # 创建Phase 0输出目录
   mkdir -p "$PROJECT_DIR/01-Phase0-合规预审"
 
-  echo -e "${GREEN}Phase 0 完成${NC}"
-  return 0
+  # 获取小说文件内容（用于Claude Code任务）
+  local NOVEL_CONTENT=$(cat "$NOVEL_FILE")
+
+  # 构建Claude Code任务
+  local CLAUDE_TASK="## Phase 0 任务：品控合规官
+
+执行品控合规官任务：
+
+**项目名**: $PROJECT
+**小说文件**: $NOVEL_FILE
+**输出目录**: $PROJECT_DIR/01-Phase0-合规预审
+
+### 任务要求
+
+1. 加载品控合规官角色定义: agents/orchestrator/compliance/Phase0/Phase0-主索引.md
+2. 加载执行步骤:
+   - Step1-接收解析.md
+   - Step2-合规审核.md
+   - Step3-评分标准.md
+   - Step4-问题分类.md
+   - Step5-生成报告.md
+3. 加载质量标准: Phase0-质量标准.md
+4. 读取小说文件内容
+5. 执行合规预审
+6. 生成合规预审报告到: $PROJECT_DIR/01-Phase0-合规预审/合规预审报告.md
+
+### 小说内容
+
+$NOVEL_CONTENT
+
+### 输出要求
+
+报告必须包含:
+1. 合规通过/驳回判定
+2. 问题清单（如有）
+3. 修改建议（如有）
+4. 评分（0-10）
+
+请开始执行。"
+
+  run_claude "$CLAUDE_TASK" "Phase 0"
+  return $?
 }
 
 # Phase 1: 内容总导演
@@ -134,8 +202,63 @@ run_phase1() {
 
   mkdir -p "$PROJECT_DIR/02-Phase1-剧本分镜"
 
-  echo -e "${GREEN}Phase 1 完成${NC}"
-  return 0
+  # 检查Phase 0报告是否存在
+  if [ ! -f "$PROJECT_DIR/01-Phase0-合规预审/合规预审报告.md" ]; then
+    print_error "Phase 0 报告不存在，请先执行 Phase 0"
+    return 1
+  fi
+
+  # 获取Phase 0报告内容
+  local PHASE0_REPORT=$(cat "$PROJECT_DIR/01-Phase0-合规预审/合规预审报告.md")
+
+  # 获取原始小说内容
+  local NOVEL_FILE=$(find "$INPUT_DIR" -maxdepth 1 -name "*.txt" -o -name "*.md" | head -1)
+  local NOVEL_CONTENT=$(cat "$NOVEL_FILE")
+
+  local CLAUDE_TASK="## Phase 1 任务：内容总导演
+
+执行内容总导演任务：
+
+**项目名**: $PROJECT
+**Phase 0 报告**: $PROJECT_DIR/01-Phase0-合规预审/合规预审报告.md
+**输出目录**: $PROJECT_DIR/02-Phase1-剧本分镜
+
+### 任务要求
+
+1. 加载内容总导演角色定义: agents/orchestrator/director/Phase1/Phase1-主索引.md
+2. 加载执行步骤:
+   - Step1-接收准备.md
+   - Step2-剧本改编.md
+   - Step3-分镜设计.md
+3. 加载质量标准: Phase1-质量标准.md
+4. 读取合规预审报告确认通过
+5. 读取原始小说
+6. 执行剧本改编和分镜设计
+7. 生成产出物到 $PROJECT_DIR/02-Phase1-剧本分镜/:
+   - 剧本.md
+   - 基础分镜执行表.md
+   - 人物清单.md
+   - 场景清单.md
+
+### Phase 0 合规预审报告
+
+$PHASE0_REPORT
+
+### 原始小说内容
+
+$NOVEL_CONTENT
+
+### 输出要求
+
+产出物必须:
+1. 符合所选风格规范
+2. 包含完整的角色和场景清单
+3. 分镜数量符合公式: target_shots ≈ ceil(total_word_count / 80)
+
+请开始执行。"
+
+  run_claude "$CLAUDE_TASK" "Phase 1"
+  return $?
 }
 
 # Phase 1.5: 镜头序列设计师
@@ -144,8 +267,57 @@ run_phase1_5() {
 
   mkdir -p "$PROJECT_DIR/03-Phase1.5-镜头序列"
 
-  echo -e "${GREEN}Phase 1.5 完成${NC}"
-  return 0
+  # 检查Phase 1产出是否存在
+  if [ ! -f "$PROJECT_DIR/02-Phase1-剧本分镜/基础分镜执行表.md" ]; then
+    print_error "Phase 1 产出不存在，请先执行 Phase 1"
+    return 1
+  fi
+
+  # 获取Phase 1产出内容
+  local STORYBOARD=$(cat "$PROJECT_DIR/02-Phase1-剧本分镜/基础分镜执行表.md")
+  local SCRIPT=$(cat "$PROJECT_DIR/02-Phase1-剧本分镜/剧本.md")
+  local CHARACTERS=$(cat "$PROJECT_DIR/02-Phase1-剧本分镜/人物清单.md")
+  local SCENES=$(cat "$PROJECT_DIR/02-Phase1-剧本分镜/场景清单.md")
+
+  local CLAUDE_TASK="## Phase 1.5 任务：镜头序列设计师
+
+执行镜头序列设计师任务：
+
+**项目名**: $PROJECT
+**Phase 1 产出**: $PROJECT_DIR/02-Phase1-剧本分镜/
+**输出目录**: $PROJECT_DIR/03-Phase1.5-镜头序列
+
+### 任务要求
+
+1. 加载镜头序列设计师角色定义: agents/orchestrator/shot-designer/Phase1.5/Phase1.5-主索引.md
+2. 加载执行步骤:
+   - Step1-镜头序列设计.md
+   - Step2-序列衔接表.md
+3. 加载质量标准: Phase1.5-质量标准.md
+4. 读取 Phase 1 产出
+5. 设计增强分镜序列
+6. 生成产出物到 $PROJECT_DIR/03-Phase1.5-镜头序列/:
+   - 增强分镜执行表.md
+   - 序列衔接与继承表.md
+
+### Phase 1 产出
+
+**基础分镜执行表.md**:
+$STORYBOARD
+
+**剧本.md**:
+$SCRIPT
+
+**人物清单.md**:
+$CHARACTERS
+
+**场景清单.md**:
+$SCENES
+
+请开始执行。"
+
+  run_claude "$CLAUDE_TASK" "Phase 1.5"
+  return $?
 }
 
 # Phase 2a: 美术技术总监 - 人物四视图
@@ -154,8 +326,61 @@ run_phase2a() {
 
   mkdir -p "$PROJECT_DIR/04-Phase2a-风格四视图"
 
-  echo -e "${GREEN}Phase 2a 完成${NC}"
-  return 0
+  # 检查Phase 1.5产出是否存在
+  if [ ! -f "$PROJECT_DIR/03-Phase1.5-镜头序列/增强分镜执行表.md" ]; then
+    print_error "Phase 1.5 产出不存在，请先执行 Phase 1.5"
+    return 1
+  fi
+
+  # 获取所有必要内容
+  local CHARACTER_LIST=$(cat "$PROJECT_DIR/02-Phase1-剧本分镜/人物清单.md")
+  local SCENE_LIST=$(cat "$PROJECT_DIR/02-Phase1-剧本分镜/场景清单.md")
+  local STORYBOARD=$(cat "$PROJECT_DIR/03-Phase1.5-镜头序列/增强分镜执行表.md")
+
+  local CLAUDE_TASK="## Phase 2a 任务：美术技术总监（人物四视图）
+
+执行美术技术总监 Phase 2a 任务：
+
+**项目名**: $PROJECT
+**Phase 1.5 产出**: $PROJECT_DIR/03-Phase1.5-镜头序列/
+**Phase 1 产出**: $PROJECT_DIR/02-Phase1-剧本分镜/
+**输出目录**: $PROJECT_DIR/04-Phase2a-风格四视图
+
+### 任务要求
+
+1. 加载美术技术总监角色定义: agents/orchestrator/art-director/Phase2-主索引.md
+2. 加载执行步骤:
+   - Step1-人物分析.md
+   - Step2-四视图生成.md
+   - Step3-场景资产卡.md
+3. 加载质量标准: Phase2a/Phase2a-质量标准.md
+4. 读取人物清单.md 和场景清单.md
+5. 读取增强分镜执行表.md
+6. 生成人物四视图Prompt包和场景资产卡
+7. 生成产出物到 $PROJECT_DIR/04-Phase2a-风格四视图/:
+   - 人物四视图Prompt包.md
+   - 场景资产卡.md
+
+### 风格规范
+
+必须遵循 rules/风格一致性.md 中的风格规则。
+禁止词正则: (?i)(影视|电影|摄像|胶片|摄影|古风写实|写实CG|游戏CG|影视质感|影视级|电影级)
+
+### 输入内容
+
+**人物清单.md**:
+$CHARACTER_LIST
+
+**场景清单.md**:
+$SCENE_LIST
+
+**增强分镜执行表.md**:
+$STORYBOARD
+
+请开始执行。"
+
+  run_claude "$CLAUDE_TASK" "Phase 2a"
+  return $?
 }
 
 # Phase 2b: 美术技术总监 - VideoPrompt
@@ -164,8 +389,65 @@ run_phase2b() {
 
   mkdir -p "$PROJECT_DIR/05-Phase2b-Prompt生成"
 
-  echo -e "${GREEN}Phase 2b 完成${NC}"
-  return 0
+  # 检查Phase 2a产出是否存在
+  if [ ! -f "$PROJECT_DIR/04-Phase2a-风格四视图/人物四视图Prompt包.md" ]; then
+    print_error "Phase 2a 产出不存在，请先执行 Phase 2a"
+    return 1
+  fi
+
+  # 获取所有必要内容
+  local CHAR_PROMPTS=$(cat "$PROJECT_DIR/04-Phase2a-风格四视图/人物四视图Prompt包.md")
+  local SCENE_ASSETS=$(cat "$PROJECT_DIR/04-Phase2a-风格四视图/场景资产卡.md")
+  local STORYBOARD=$(cat "$PROJECT_DIR/03-Phase1.5-镜头序列/增强分镜执行表.md")
+
+  local CLAUDE_TASK="## Phase 2b 任务：美术技术总监（VideoPrompt）
+
+执行美术技术总监 Phase 2b 任务：
+
+**项目名**: $PROJECT
+**Phase 2a 产出**: $PROJECT_DIR/04-Phase2a-风格四视图/
+**输出目录**: $PROJECT_DIR/05-Phase2b-Prompt生成
+
+### 任务要求
+
+1. 加载美术技术总监角色定义: agents/orchestrator/art-director/Phase2-主索引.md
+2. 加载执行步骤:
+   - Step1-接收准备.md
+   - Step2-时间分段.md
+   - Step3-VideoPrompt生成.md
+3. 加载双轨生成规则: Phase2b/双轨生成规则.md
+4. 加载质量标准: Phase2b/Phase2b-质量标准.md
+5. 读取人物四视图Prompt包.md 和场景资产卡.md
+6. 读取增强分镜执行表.md
+7. 生成VideoPrompt包
+8. 生成产出物到 $PROJECT_DIR/05-Phase2b-Prompt生成/:
+   - 视频Prompt包-中文版/视频Prompt包.md
+   - 视频Prompt包-英文版/VideoPrompt.md
+
+### 关键格式要求
+
+每个时间戳段必须包含:
+- [0:00-0:03] 格式（冒号+4位数字，Seedance 2.0要求）
+- 镜头：[景别]+[运镜方式]+[运动速度]
+- 动作：[具体物理动作描述，使用现在时态]
+
+禁止使用: [0-3s] 格式（AI不识别）
+
+### 输入内容
+
+**人物四视图Prompt包.md**:
+$CHAR_PROMPTS
+
+**场景资产卡.md**:
+$SCENE_ASSETS
+
+**增强分镜执行表.md**:
+$STORYBOARD
+
+请开始执行。"
+
+  run_claude "$CLAUDE_TASK" "Phase 2b"
+  return $?
 }
 
 # 执行完整流程

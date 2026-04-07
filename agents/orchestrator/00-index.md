@@ -56,24 +56,24 @@ Phase 0（品控合规官）→ Phase 1（内容总导演）→ Phase 1.5（镜�
 
 | 文档 | 位置 |
 |------|------|
-| 主索引 | `art-director/Phase2/Phase2-主索引.md` |
-| 四视图模板 | `art-director/Phase2/Phase2a/四视图模板.md` |
-| 质量标准 | `art-director/Phase2/Phase2a/Phase2a-质量标准.md` |
-| Step1-人物分析 | `art-director/Phase2/Phase2a/Step1-人物分析.md` |
-| Step2-四视图生成 | `art-director/Phase2/Phase2a/Step2-四视图生成.md` |
-| Step3-场景资产卡 | `art-director/Phase2/Phase2a/Step3-场景资产卡.md` |
+| 主索引 | `art-director/Phase2-主索引.md` |
+| 四视图模板 | `art-director/Phase2a/四视图模板.md` |
+| 质量标准 | `art-director/Phase2a/Phase2a-质量标准.md` |
+| Step1-人物分析 | `art-director/Phase2a/Step1-人物分析.md` |
+| Step2-四视图生成 | `art-director/Phase2a/Step2-四视图生成.md` |
+| Step3-场景资产卡 | `art-director/Phase2a/Step3-场景资产卡.md` |
 
 ### Phase 2b：美术技术总监（VideoPrompt）
 
 | 文档 | 位置 |
 |------|------|
-| 主索引 | `art-director/Phase2/Phase2-主索引.md` |
-| 双轨生成规则 | `art-director/Phase2/Phase2b/双轨生成规则.md` |
-| 质量标准 | `art-director/Phase2/Phase2b/Phase2b-质量标准.md` |
-| VideoPrompt模板 | `art-director/Phase2/Phase2b/VideoPrompt模板.md` |
-| Step1-接收准备 | `art-director/Phase2/Phase2b/Step1-接收准备.md` |
-| Step2-时间分段 | `art-director/Phase2/Phase2b/Step2-时间分段.md` |
-| Step3-VideoPrompt生成 | `art-director/Phase2/Phase2b/Step3-VideoPrompt生成.md` |
+| 主索引 | `art-director/Phase2-主索引.md` |
+| 双轨生成规则 | `art-director/Phase2b/双轨生成规则.md` |
+| 质量标准 | `art-director/Phase2b/Phase2b-质量标准.md` |
+| VideoPrompt模板 | `art-director/Phase2b/VideoPrompt模板.md` |
+| Step1-接收准备 | `art-director/Phase2b/Step1-接收准备.md` |
+| Step2-时间分段 | `art-director/Phase2b/Step2-时间分段.md` |
+| Step3-VideoPrompt生成 | `art-director/Phase2b/Step3-VideoPrompt生成.md` |
 
 ---
 

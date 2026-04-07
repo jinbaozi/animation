@@ -143,6 +143,6 @@
 
 | 文档 | 关系 |
 |------|------|
-| [`templates/output/VideoPrompt包.md`](../output/VideoPrompt包.md) | 「〇」章引用本文件 §1–§6（含Seedance时间戳格式§5） |
+| [`templates/output/VideoPrompt包-规范.md`](../output/VideoPrompt包-规范.md) | 「〇」章引用本文件 §1–§6（含Seedance时间戳格式§5） |
 | [`templates/output/人物四视图Prompt包.md`](../output/人物四视图Prompt包.md) | 风格与负面引用本文件 |
 | [`场景基准模版.md`](场景基准模版.md) | 资产定档参考；动漫向分镜优先本文件 §1 |
