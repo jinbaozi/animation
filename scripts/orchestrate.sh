@@ -112,7 +112,7 @@ run_claude() {
   while [ $ATTEMPT -le $RETRY_COUNT ]; do
     echo -e "${YELLOW}[RETRY $ATTEMPT/$RETRY_COUNT]${NC} 执行 $PHASE_NAME..."
 
-    if claude -p "$TASK" --output-format stream 2>&1; then
+    if claude -p "$TASK" 2>&1; then
       echo -e "${GREEN}[SUCCESS]${NC} $PHASE_NAME 执行成功"
       return 0
     else

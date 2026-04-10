@@ -11,13 +11,13 @@ This is an **AI Animation Drama (AI漫剧) Production Rules System** - a modular
 ```
 animation-v3/
 │
-├── bak/                          # Backup of original role files (before agents/ migration)
-│   ├── 00-角色编排总规范.md
-│   ├── 01-AI内容总导演-角色职责规范.md
-│   ├── 02-AI美术技术总监-角色职责规范.md
-│   ├── 03-AI镜头序列设计师-角色职责规范.md
-│   └── 04-AI品控合规官-角色职责规范.md
-│   # Note: 05-编排师-角色职责规范.md → agents/orchestrator/orchestrator.md
+├── bak/                          # Historical archive (original role files, no longer active)
+│   ├── 00-角色编排总规范.md      # 归档
+│   ├── 01-AI内容总导演-角色职责规范.md  # 归档
+│   ├── 02-AI美术技术总监-角色职责规范.md # 归档
+│   ├── 03-AI镜头序列设计师-角色职责规范.md # 归档
+│   └── 04-AI品控合规官-角色职责规范.md # 归档
+│   # Note: Active role definitions moved to `agents/orchestrator/roles/`
 │
 ├── rules/                        # Modular rules (load before tasks)
 │   ├── 00-index.md               # Rules index
@@ -87,24 +87,27 @@ animation-v3/
 ├── agents/                       # AI Agent definitions
 │   ├── orchestrator/             # Orchestrator (星型拓扑中枢)
 │   │   ├── orchestrator.md      # Main orchestrator role definition
-│   │   ├── compliance/          # Phase 0 execution docs
-│   │   │   └── Phase0/
-│   │   ├── director/             # Phase 1 execution docs
-│   │   │   └── Phase1/
-│   │   ├── shot-designer/       # Phase 1.5 execution docs
-│   │   │   └── Phase1.5/
-│   │   ├── art-director/        # Phase 2 execution docs
-│   │   │   └── Phase2/
-│   │   │       ├── Phase2a/     # Character 4-view prompts
-│   │   │       └── Phase2b/     # VideoPrompt generation
+│   │   ├── roles/               # 角色定义层（两层架构）
+│   │   │   ├── README.md        # 角色索引
+│   │   │   ├── orchestrator-role.md
+│   │   │   ├── compliance-role.md    # 品控合规官
+│   │   │   ├── director-role.md      # 内容总导演
+│   │   │   ├── shot-designer-role.md # 镜头序列设计师
+│   │   │   └── art-director-role.md  # 美术技术总监
+│   │   ├── phases/              # 执行流程层（两层架构）
+│   │   │   ├── Phase0/          # 品控合规官执行文档
+│   │   │   ├── Phase1/          # 内容总导演执行文档
+│   │   │   ├── Phase1.5/        # 镜头序列设计师执行文档
+│   │   │   ├── Phase2/          # Phase 2 主索引
+│   │   │   ├── Phase2a/         # 人物四视图生成
+│   │   │   └── Phase2b/         # VideoPrompt生成
 │   │   ├── Seedance2/          # Seedance 2.0 techniques
 │   │   │   ├── Seedance2-基础理论.md
 │   │   │   ├── Seedance2-禁止清单.md
 │   │   │   ├── Seedance2-模板示例.md
 │   │   │   ├── Seedance2-NotebookLM补充.md
 │   │   │   └── Seedance2提示词技巧大全.md
-│   │   └── execution/           # Shared execution docs
-│   │       └── *.md
+│   │   └── 00-index.md          # 编排智能体索引
 │   │
 │   └── audit/                   # Audit agent (独立审核系统)
 │       ├── audit-agent.md       # Audit agent orchestrator
@@ -141,12 +144,13 @@ animation-v3/
 | Role | Entry Point | Phase | Core Responsibility |
 |------|-------------|-------|---------------------|
 | 编排师 | `agents/orchestrator/orchestrator.md` | - | Coordinator (用户 ↔ 执行角色) |
-| AI品控合规官 | `bak/04-AI品控合规官-角色职责规范.md` | Phase 0 | Compliance review |
-| AI内容总导演 | `bak/01-AI内容总导演-角色职责规范.md` | Phase 1 | Script + storyboard |
-| AI镜头序列设计师 | `bak/03-AI镜头序列设计师-角色职责规范.md` | Phase 1.5 | Scene sequence design |
-| AI美术技术总监 | `bak/02-AI美术技术总监-角色职责规范.md` | Phase 2a/2b | Visual assets + prompts |
+| AI品控合规官 | `agents/orchestrator/roles/compliance-role.md` | Phase 0 | Compliance review |
+| AI内容总导演 | `agents/orchestrator/roles/director-role.md` | Phase 1 | Script + storyboard |
+| AI镜头序列设计师 | `agents/orchestrator/roles/shot-designer-role.md` | Phase 1.5 | Scene sequence design |
+| AI美术技术总监 | `agents/orchestrator/roles/art-director-role.md` | Phase 2a/2b | Visual assets + prompts |
 
-> Note: Role definition files are backed up in `bak/`. Active role definitions are in `agents/orchestrator/{submodule}/`.
+> Note: Two-layer architecture: `roles/` = 角色定义层, `phases/` = 执行流程层
+> Historical role definitions are archived in `bak/` (no longer active).
 
 ### Phase Execution Flow
 
@@ -182,20 +186,16 @@ Phase 0（品控合规官）→ Phase 1（内容总导演）→ Phase 1.5（镜�
    - If project is "国风动漫" → NEVER use "古风写实", "影视质感", etc.
    - Forbidden regex: `(?i)(影视|电影|摄像|胶片|摄影|古风写实|写实CG|游戏CG|影视质感|影视级|电影级)`
 
-2. **User Aesthetic: 病弱古典美人**
-   - Preferred: 鹅蛋脸, 病态苍白, 杏核眼, 纤细单薄
-   - Forbidden: 瓜子脸, 健康红润, 大眼睛, 丰满
-
-3. **Character 4-View Format (MANDATORY)**
+2. **Character 4-View Format (MANDATORY)**
    - Must have exactly 4 views: 正面全身, 侧面全身, 背面全身, 面部特写
    - All must be full body shots on pure white background
    - Every character including 龙套 must have 4-view prompts
 
-4. **VideoPrompt Format**
+3. **VideoPrompt Format**
    - Time segments: 0-3s | 3-6s | 6-9s | 9-12s | 12-15s
    - Each segment: 动作/内心活动/台词 (pick one based on scene type) + 镜头
 
-5. **Dual-Track Generation**
+4. **Dual-Track Generation**
    - Chinese + English prompts must be generated simultaneously
    - Stored in parallel directories
 
@@ -231,18 +231,19 @@ Phase 0（品控合规官）→ Phase 1（内容总导演）→ Phase 1.5（镜�
 
 ### Path Conventions
 
-- Role files (backup): `bak/` (original role definitions before migration)
+- Role files: `agents/orchestrator/roles/` (角色定义层)
+- Execution docs: `agents/orchestrator/phases/` (执行流程层)
+- Historical archives: `bak/` (original role definitions, no longer active)
 - Orchestrator entry: `agents/orchestrator/orchestrator.md`
 - Audit agent entry: `agents/audit/audit-agent.md`
 - Rules: `rules/` directory
 - Templates: `templates/` directory
-- Execution docs: `agents/orchestrator/{submodule}/PhaseX/`
 - Examples: `examples/` directory
 
 **Do NOT use**:
 - `01-角色/` (doesn't exist)
 - `02-基准模版/` (doesn't exist)
-- `docs/execution/` (migrated to `agents/orchestrator/`)
+- `docs/execution/` (migrated to `agents/orchestrator/phases/`)
 - `agents/orchestrator/Seedance2/` (migrated to `rules/Seedance2/`)
 
 See `docs/路径规范.md` for full path conventions.
