@@ -1,7 +1,8 @@
 # 输出目录结构规范
 
-> 版本：v1.0.0
+> 版本：v1.1.0
 > 创建日期：2026-04-04
+> 更新日期：2026-04-10
 
 ---
 
@@ -33,8 +34,7 @@ output/
 │   └── 用户需求文档.md
 │
 ├── 01-Phase0-合规预审/
-│   ├── 合规预审报告.md
-│   └── 审核意见.docx (如有)
+│   └── 合规预审报告.md
 │
 ├── 02-Phase1-剧本分镜/
 │   ├── 剧本.md
@@ -51,15 +51,20 @@ output/
 │   └── 四视图预览/ (如有生成的图片)
 │
 ├── 05-Phase2b-Prompt/
-│   ├── VideoPrompt包.md
-│   ├── 场景资产卡/
-│   └── 试生成素材/ (如有)
+│   ├── VideoPrompt包-中文版.md    # 中文提示词
+│   └── VideoPrompt包-英文版.md    # English prompts
 │
 └── 99-最终交付物/
-    ├── 完整VideoPrompt包.md
+    ├── 完整VideoPrompt包-中文版.md
+    ├── 完整VideoPrompt包-英文版.md
     ├── 资产清单.md
     └── 交付检查清单.md
 ```
+
+**Phase 2b 目录说明**：
+- 目录名：`05-Phase2b-Prompt`（不是`05-Phase2b-视频提示词`）
+- 中英文分开存放，不混在同一文件
+- 每个文件包含338个shot（与增强分镜执行表一致）
 
 ---
 
@@ -77,7 +82,8 @@ output/
 | Phase 1.5 | `增强分镜执行表.md` | 固定名称 |
 | Phase 1.5 | `序列衔接与继承表.md` | 固定名称 |
 | Phase 2a | `人物四视图Prompt包.md` | 固定名称 |
-| Phase 2b | `VideoPrompt包.md` | 固定名称 |
+| Phase 2b | `VideoPrompt包-中文版.md` | 中文提示词 |
+| Phase 2b | `VideoPrompt包-英文版.md` | English prompts |
 
 ### 3.2 资源文件
 
@@ -100,16 +106,16 @@ output/
 
 每次重大修改创建新版本：
 ```
-VideoPrompt包_v1.md
-VideoPrompt包_v2.md
-VideoPrompt包_v3.md
+VideoPrompt包-中文版_v1.md
+VideoPrompt包-中文版_v2.md
+VideoPrompt包-中文版_v3.md
 ```
 
 ### 4.2 交付版本
 
 最终交付文件添加 `_final` 后缀：
 ```
-VideoPrompt包_final.md
+VideoPrompt包-中文版_final.md
 ```
 
 ---
@@ -130,4 +136,5 @@ VideoPrompt包_final.md
 
 | 版本 | 日期 | 修改内容 |
 |------|------|---------|
+| v1.1.0 | 2026-04-10 | Phase 2b目录改为中英文分开存放 |
 | v1.0.0 | 2026-04-04 | 初始版本 |

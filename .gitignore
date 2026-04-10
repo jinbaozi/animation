@@ -7,6 +7,9 @@ review/
 # LLM usage plans and specs
 docs/superpowers/
 
+# Output directories (auto-generated)
+output/
+
 # Backup files
 *.bak
 
