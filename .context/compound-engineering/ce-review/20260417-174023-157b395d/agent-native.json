@@ -1,0 +1,89 @@
+{
+  "reviewer": "agent-native",
+  "findings": [
+    {
+      "title": "orchestrate.sh references non-existent Phase0 path (agents/orchestrator/compliance/Phase0/)",
+      "severity": "P1",
+      "file": "scripts/orchestrate.sh",
+      "line": 169,
+      "why_it_matters": "Agent executing Phase0 will fail to load compliance role definition - path does not exist. Actual path is agents/orchestrator/phases/Phase0/Phase0-主索引.md",
+      "autofix_class": "manual",
+      "owner": "downstream-resolver",
+      "requires_verification": true,
+      "suggested_fix": "Change line 169 from 'agents/orchestrator/compliance/Phase0/Phase0-主索引.md' to 'agents/orchestrator/phases/Phase0/Phase0-主索引.md'",
+      "confidence": 0.95,
+      "evidence": ["Line 169 references 'agents/orchestrator/compliance/Phase0/Phase0-主索引.md' which does not exist", "Actual path is agents/orchestrator/phases/Phase0/Phase0-主索引.md", "Directory listing confirms compliance/ subdirectory does not exist under agents/orchestrator/"],
+      "pre_existing": true
+    },
+    {
+      "title": "orchestrate.sh does not instruct agent to execute Step0-图谱查询.md graphify MCP query",
+      "severity": "P1",
+      "file": "scripts/orchestrate.sh",
+      "line": 159,
+      "why_it_matters": "The new Step0-图谱查询.md workflow requires MCP graphify queries before compliance review. The script only loads Step1-5 but omits Step0 instruction. Agent will not query the knowledge graph.",
+      "autofix_class": "manual",
+      "owner": "downstream-resolver",
+      "requires_verification": true,
+      "suggested_fix": "Add to task requirements section: '0. 执行 Step0-图谱查询.md: 通过 MCP 连接 graphify 获取禁用词正则、禁止行为清单、生成前8项自检、平台合规规则'",
+      "confidence": 0.9,
+      "evidence": ["Step0-图谱查询.md defines mandatory graphify MCP queries that must execute before compliance review", "Phase0-主索引.md line 33 explicitly lists Step0-图谱查询.md as first submodule with 'Step 0' label", "orchestrate.sh task requirements list Step1-5 but omit Step0 entirely", "The script injects Step1-5 filenames but Step0 is absent from the instruction block"],
+      "pre_existing": false
+    },
+    {
+      "title": "orchestrate.sh Phase0 task template does not mention MCP tool usage or graphify",
+      "severity": "P2",
+      "file": "scripts/orchestrate.sh",
+      "line": 158,
+      "why_it_matters": "Agent has no indication it should use MCP tools to query graphify. Without explicit MCP invocation instruction, graphify knowledge graph will not be consulted even if Step0 file were referenced.",
+      "autofix_class": "manual",
+      "owner": "downstream-resolver",
+      "requires_verification": true,
+      "suggested_fix": "Add instruction: '使用 MCP 工具连接 graphify server 查询合规规则。mcp_config.json 已配置 graphify MCP。'",
+      "confidence": 0.85,
+      "evidence": ["mcp_config.json correctly configures graphify MCP server at /Users/godxu/.local/pipx/venvs/graphifyy/bin/python", "Step0-图谱查询.md section 0.1 shows MCP connection method", "No MCP tool invocation appears anywhere in the Phase0 task template", "CLAUDE.md global instructions mention /graphify Skill but orchestrate.sh script does not reference it"],
+      "pre_existing": false
+    },
+    {
+      "title": "orchestrate.md entry point does not reference graphify or Step0 workflow",
+      "severity": "P2",
+      "file": ".claude/commands/orchestrate.md",
+      "line": 62,
+      "why_it_matters": "User-facing /orchestrate command documentation shows Phase flow as 'Phase 0 → Phase 1 → ...' but provides no indication that Phase 0 involves graphify MCP queries. Agent reviewing this file for workflow understanding will not learn about graphify dependency.",
+      "autofix_class": "advisory",
+      "owner": "downstream-resolver",
+      "requires_verification": false,
+      "suggested_fix": "Add note under Phase 0: '[通过 MCP graphify 查询合规规则]'",
+      "confidence": 0.8,
+      "evidence": ["orchestrate.md line 62 shows correct Phase flow but no mention of graphify", "Step0-图谱查询.md defines mandatory graphify MCP queries", "The /graphify Skill in CLAUDE.md instructs to invoke Skill tool with skill: graphify but this is not mentioned in orchestrate workflow docs"],
+      "pre_existing": false
+    },
+    {
+      "title": "orchestrate.md does not reference orchestrator.sh script path",
+      "severity": "P3",
+      "file": ".claude/commands/orchestrate.md",
+      "line": 45,
+      "why_it_matters": "The technical implementation section mentions 'scripts/orchestrate.sh' but does not include path prefix. Agent or user running /orchestrate from wrong directory may fail to find script.",
+      "autofix_class": "advisory",
+      "owner": "downstream-resolver",
+      "requires_verification": false,
+      "suggested_fix": "Use absolute path: '$(pwd)/scripts/orchestrate.sh' or reference scripts/orchestrate.sh relative to project root",
+      "confidence": 0.7,
+      "evidence": ["Line 45 says 'scripts/orchestrate.sh' without path context", "Script itself uses relative paths like output/$PROJECT and input/$PROJECT"],
+      "pre_existing": true
+    }
+  ],
+  "residual_risks": [
+    "Phase 0 will execute without graphify knowledge graph queries if orchestrate.sh is not corrected - compliance rules will be loaded from static files only, bypassing the new graphify integration",
+    "orchestrate.sh hardcoded path errors (agents/orchestrator/compliance/) will cause Phase0 execution to fail at the role definition loading step",
+    "If graphify graph.json is not kept in sync with rules/Seedance2/禁止清单.md, agents using graphify will get stale compliance rules while static file readers get current rules (divergence risk)",
+    "No circular reference protection: graph contains agents/ references but agents/ docs do not reference graph back - this is correct direction but no forward-reference mechanism exists",
+    "The /graphify Skill invocation pattern (Skill tool with skill: graphify) is not mentioned in any Phase execution document - agent must either know to invoke it or discover it from CLAUDE.md"
+  ],
+  "testing_gaps": [
+    "No automated test verifies that orchestrate.sh loads Phase0 from correct path",
+    "No automated test verifies that Step0-图谱查询.md is executed before Step1 in Phase0",
+    "No integration test confirms graphify MCP returns correct forbidden word regex matching rules/Seedance2/Seedance2-禁止清单.md",
+    "No test for graph sync: when rules/Seedance2/ changes, does graphify-out/graph.json get regenerated?",
+    "No test verifying that --phase=0 flag correctly starts at Step0 rather than skipping graphify queries"
+  ]
+}

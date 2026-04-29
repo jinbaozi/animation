@@ -1,0 +1,91 @@
+{
+  "reviewer": "project-standards",
+  "findings": [
+    {
+      "title": "mcp_config.json contains absolute paths — not portable across machines",
+      "severity": "P1",
+      "file": "mcp_config.json",
+      "line": 4,
+      "why_it_matters": "The Python interpreter path /Users/godxu/.local/pipx/venvs/graphifyy/bin/python and the absolute path to graph.json will break on any machine that is not this specific user's environment. This config will silently fail when used by another developer or on a CI system.",
+      "autofix_class": "safe_auto",
+      "owner": "review-fixer",
+      "requires_verification": true,
+      "suggested_fix": "Replace absolute paths with environment-variable-based or relative references. For the Python interpreter, use \"python3\" (in PATH) and rely on the user's shell PATH resolution. For the graph.json path, use a path relative to the project root (e.g., ${PROJECT_ROOT}/graphify-out/graph.json or ./graphify-out/graph.json) or derive it via environment variable. The MCP command field should be just \"python3\" and args should use a relative path or ${GRAPHIFY_GRAPH_PATH} env var.",
+      "confidence": 0.95,
+      "evidence": [
+        "mcp_config.json line 4: command=/Users/godxu/.local/pipx/venvs/graphifyy/bin/python",
+        "mcp_config.json line 5: args contains absolute path /Users/godxu/02-workspace/animation-v3/graphify-out/graph.json"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "Step0-图谱查询.md in Phase 1.5 copies absolute MCP config inline — same portability issue",
+      "severity": "P1",
+      "file": "agents/orchestrator/phases/Phase1.5/Step0-图谱查询.md",
+      "line": 11,
+      "why_it_matters": "Phase 1.5's Step0 file embeds the absolute-path MCP config directly in the markdown, repeating the same non-portable paths from mcp_config.json. Other Phase files reference mcp_config.json externally, making them portable by indirection — but Phase 1.5 inlines the broken config.",
+      "autofix_class": "safe_auto",
+      "owner": "review-fixer",
+      "requires_verification": true,
+      "suggested_fix": "Replace the inline JSON block in Phase 1.5/Step0-图谱查询.md with a reference to mcp_config.json, consistent with how Phase 0, Phase 1, Phase 2a, and Phase 2b handle it (they all say '通过 mcp_config.json 连接'). The file should read: '通过 mcp_config.json 连接 graphify MCP server（连接方式见 mcp_config.json）' without embedding the JSON.",
+      "confidence": 0.92,
+      "evidence": [
+        "Phase1.5/Step0-图谱查询.md line 11 embeds inline JSON with absolute paths",
+        "Phase0/Step0-图谱查询.md line 11 correctly references '通过 mcp_config.json 连接' without inlining",
+        "Phase1/Step0-图谱查询.md line 11 correctly references '通过 mcp_config.json 连接'",
+        "Phase2a/Step0-图谱查询.md line 11 correctly references '通过 mcp_config.json 连接'",
+        "Phase2b/Step0-图谱查询.md line 11 correctly references '通过 mcp_config.json 连接'"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "graph.json node IDs use inconsistent naming conventions — Chinese, English, and mixed-case",
+      "severity": "P2",
+      "file": "graphify-out/graph.json",
+      "line": 1,
+      "why_it_matters": "Node IDs are not normalized: some use English snake_case (seedance2_basic_theory, character_four_view_format), some use Chinese characters (meisheng_pianhao, fengge_yizhixing), some use mixed ASCII/hybrid (seedance2_\u57fa\u7840\u7406\u8bba which is seedance2_基础理论 but URL-encoded). This creates unpredictable ID strings, makes programmatic access error-prone, and some IDs may break tooling that assumes ASCII identifiers. There are also duplicates with different encodings (seedance2_basic_theory vs seedance2_\u57fa\u7840\u7406\u8bba).",
+      "autofix_class": "advisory",
+      "owner": "downstream-resolver",
+      "requires_verification": false,
+      "suggested_fix": "Establish a naming convention: use only lowercase ASCII snake_case for all node IDs. All Chinese content should be transliterated or compressed (e.g., meisheng_pianhao, fengge_yizhixing, yunjing_zhishi, shuagui_shengcheng). Remove URL-encoded Chinese from IDs. Dedup the pairs: seedance2_basic_theory / seedance2_\u57fa\u7840\u7406\u8bba, seedance2_prohibition_list / Seedance2-\u7981\u6b62\u6e05\u5355, etc.",
+      "confidence": 0.88,
+      "evidence": [
+        "English snake_case: seedance2_basic_theory, character_four_view_format, art_director_role",
+        "Pure Chinese romanized: meisheng_pianhao, fengge_yizhixing, yunjing_zhishi, shuagui_shengcheng, zhiliang_menjin, platform_hegui",
+        "Mixed/hybrid: seedance2_\u57fa\u7840\u7406\u8bba (URL-encoded Chinese after seedance2_)",
+        "Duplicate IDs with different encodings: seedance2_basic_theory vs seedance2_\u57fa\u7840\u7406\u8bba",
+        "Capitalization inconsistency: Phase0, Phase1, Phase1.5, Phase2a, Phase2b vs eight_scene_types, art_director_role (all lowercase)",
+        "Chinese in IDs: \u4e09\u89d2\u8272\u661f\u578b\u62d3\u6251, \u7f16\u6392\u5e08, \u7f8e\u672f\u6280\u672f\u603b\u76d1"
+      ],
+      "pre_existing": true
+    },
+    {
+      "title": "docs/plans/ plan file references absolute paths in sources section",
+      "severity": "P2",
+      "file": "docs/plans/2026-04-17-001-refactor-knowledge-graph-orchestrate-integration-plan.md",
+      "line": 239,
+      "why_it_matters": "The plan file's Sources & References section hard-codes an absolute path (/Users/godxu/.gstack/projects/animation-v3/godxu-main-design-knowledge-graph-orchestrate-20260417-144028.md) which will be invalid on other machines. While this is only a reference metadata field, it breaks portability and could cause broken links in documentation.",
+      "autofix_class": "advisory",
+      "owner": "human",
+      "requires_verification": false,
+      "suggested_fix": "Replace the absolute path with a relative path or a symbolic reference (e.g., ../../.gstack/projects/animation-v3/... or just the filename if the file is co-located in the same repo). Alternatively, move the referenced design doc into the repo under docs/ or docs/brainstorms/.",
+      "confidence": 0.90,
+      "evidence": [
+        "Line 239: /Users/godxu/.gstack/projects/animation-v3/godxu-main-design-knowledge-graph-orchestrate-20260417-144028.md"
+      ],
+      "pre_existing": false
+    }
+  ],
+  "residual_risks": [
+    "If mcp_config.json is deployed as-is, graphify MCP server will fail to start on any machine other than the original developer",
+    "Phase 1.5 Step0 file's inline absolute-path config creates a second breakage point independent of mcp_config.json",
+    "Inconsistent node ID formats in graph.json may cause graphify query failures or silent mismatches when the graph is queried by ID",
+    "The graph.json contains duplicate node ID pairs (seedance2_basic_theory / seedance2_\u57fa\u7840\u7406\u8bba) which could cause the graph to contain conflicting or merged data for the same conceptual entity"
+  ],
+  "testing_gaps": [
+    "No test verifies mcp_config.json works on a different machine or with a different user account",
+    "No test verifies the graph.json node IDs are unique and follow a consistent naming convention",
+    "No test verifies that all Step0-图谱查询.md files have consistent (non-inlined) references to mcp_config.json",
+    "No test verifies that the absolute path in docs/plans/ plan file is resolvable on the current machine"
+  ]
+}

@@ -166,17 +166,18 @@ run_phase0() {
 
 ### 任务要求
 
-1. 加载品控合规官角色定义: agents/orchestrator/compliance/Phase0/Phase0-主索引.md
-2. 加载执行步骤:
+1. 加载品控合规官角色定义: agents/orchestrator/phases/Phase0/Phase0-主索引.md
+2. **【强制】先执行 Step0-图谱查询.md**：通过 mcp_config.json 连接 graphify MCP server，查询合规规则（禁用词正则、禁止行为清单、生成前8项自检、平台合规规则），记录 source_location 溯源
+3. 加载执行步骤:
    - Step1-接收解析.md
    - Step2-合规审核.md
    - Step3-评分标准.md
    - Step4-问题分类.md
    - Step5-生成报告.md
-3. 加载质量标准: Phase0-质量标准.md
-4. 读取小说文件内容
-5. 执行合规预审
-6. 生成合规预审报告到: $PROJECT_DIR/01-Phase0-合规预审/合规预审报告.md
+4. 加载质量标准: Phase0-质量标准.md
+5. 读取小说文件内容
+6. 执行合规预审
+7. 生成合规预审报告到: $PROJECT_DIR/01-Phase0-合规预审/合规预审报告.md
 
 ### 小说内容
 
@@ -225,16 +226,17 @@ run_phase1() {
 
 ### 任务要求
 
-1. 加载内容总导演角色定义: agents/orchestrator/director/Phase1/Phase1-主索引.md
-2. 加载执行步骤:
+1. 加载内容总导演角色定义: agents/orchestrator/phases/Phase1/Phase1-主索引.md
+2. **【强制】先执行 Step0-图谱查询.md**：通过 mcp_config.json 连接 graphify MCP server，查询八场景类型、场景模板索引、审美偏好规则、风格一致性规则，记录 source_location 溯源
+3. 加载执行步骤:
    - Step1-接收准备.md
    - Step2-剧本改编.md
    - Step3-分镜设计.md
-3. 加载质量标准: Phase1-质量标准.md
-4. 读取合规预审报告确认通过
-5. 读取原始小说
-6. 执行剧本改编和分镜设计
-7. 生成产出物到 $PROJECT_DIR/02-Phase1-剧本分镜/:
+4. 加载质量标准: Phase1-质量标准.md
+5. 读取合规预审报告确认通过
+6. 读取原始小说
+7. 执行剧本改编和分镜设计
+8. 生成产出物到 $PROJECT_DIR/02-Phase1-剧本分镜/:
    - 剧本.md
    - 基础分镜执行表.md
    - 人物清单.md
@@ -289,14 +291,15 @@ run_phase1_5() {
 
 ### 任务要求
 
-1. 加载镜头序列设计师角色定义: agents/orchestrator/shot-designer/Phase1.5/Phase1.5-主索引.md
-2. 加载执行步骤:
+1. 加载镜头序列设计师角色定义: agents/orchestrator/phases/Phase1.5/Phase1.5-主索引.md
+2. **【强制】先执行 Step0-图谱查询.md**：通过 mcp_config.json 连接 graphify MCP server，查询镜头运动规则、场景切换规则、序列衔接规则，记录 source_location 溯源
+3. 加载执行步骤:
    - Step1-镜头序列设计.md
    - Step2-序列衔接表.md
-3. 加载质量标准: Phase1.5-质量标准.md
-4. 读取 Phase 1 产出
-5. 设计增强分镜序列
-6. 生成产出物到 $PROJECT_DIR/03-Phase1.5-镜头序列/:
+4. 加载质量标准: Phase1.5-质量标准.md
+5. 读取 Phase 1 产出
+6. 设计增强分镜序列
+7. 生成产出物到 $PROJECT_DIR/03-Phase1.5-镜头序列/:
    - 增强分镜执行表.md
    - 序列衔接与继承表.md
 
@@ -348,16 +351,17 @@ run_phase2a() {
 
 ### 任务要求
 
-1. 加载美术技术总监角色定义: agents/orchestrator/art-director/Phase2-主索引.md
-2. 加载执行步骤:
+1. 加载美术技术总监角色定义: agents/orchestrator/phases/Phase2a/Phase2a-主索引.md
+2. **【强制】先执行 Step0-图谱查询.md**：通过 mcp_config.json 连接 graphify MCP server，查询人物四视图格式、风格一致性规则、人物一致性控制、禁止词正则，记录 source_location 溯源
+3. 加载执行步骤:
    - Step1-人物分析.md
    - Step2-四视图生成.md
    - Step3-场景资产卡.md
-3. 加载质量标准: Phase2a/Phase2a-质量标准.md
-4. 读取人物清单.md 和场景清单.md
-5. 读取增强分镜执行表.md
-6. 生成人物四视图Prompt包和场景资产卡
-7. 生成产出物到 $PROJECT_DIR/04-Phase2a-风格四视图/:
+4. 加载质量标准: Phase2a/Phase2a-质量标准.md
+5. 读取人物清单.md 和场景清单.md
+6. 读取增强分镜执行表.md
+7. 生成人物四视图Prompt包和场景资产卡
+8. 生成产出物到 $PROJECT_DIR/04-Phase2a-风格四视图/:
    - 人物四视图Prompt包.md
    - 场景资产卡.md
 
@@ -410,17 +414,18 @@ run_phase2b() {
 
 ### 任务要求
 
-1. 加载美术技术总监角色定义: agents/orchestrator/art-director/Phase2-主索引.md
-2. 加载执行步骤:
+1. 加载美术技术总监角色定义: agents/orchestrator/phases/Phase2b/Phase2b-主索引.md
+2. **【强制】先执行 Step0-图谱查询.md**：通过 mcp_config.json 连接 graphify MCP server，查询VideoPrompt格式、双轨生成规则、禁止行为清单、Negative Prompt写法，记录 source_location 溯源
+3. 加载执行步骤:
    - Step1-接收准备.md
    - Step2-时间分段.md
    - Step3-VideoPrompt生成.md
-3. 加载双轨生成规则: Phase2b/双轨生成规则.md
-4. 加载质量标准: Phase2b/Phase2b-质量标准.md
-5. 读取人物四视图Prompt包.md 和场景资产卡.md
-6. 读取增强分镜执行表.md
-7. 生成VideoPrompt包
-8. 生成产出物到 $PROJECT_DIR/05-Phase2b-Prompt生成/:
+4. 加载双轨生成规则: Phase2b/双轨生成规则.md
+5. 加载质量标准: Phase2b/Phase2b-质量标准.md
+6. 读取人物四视图Prompt包.md 和场景资产卡.md
+7. 读取增强分镜执行表.md
+8. 生成VideoPrompt包
+9. 生成产出物到 $PROJECT_DIR/05-Phase2b-Prompt生成/:
    - 视频Prompt包-中文版/视频Prompt包.md
    - 视频Prompt包-英文版/VideoPrompt.md
 

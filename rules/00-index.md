@@ -46,15 +46,20 @@
 
 ### Seedance2 技术指南
 
-**位置：** `rules/Seedance2/`（从 `agents/orchestrator/Seedance2/` 迁移）
+**位置：** `knowledge/seedance2/`（统一知识库，已合并 rules/Seedance2/ 和 templates/knowledge/Seedance2*）
 
 | 文档 | 用途 |
 |------|------|
-| `Seedance2-基础理论.md` | Seedance 2.0 基础概念和工作原理 |
-| `Seedance2-禁止清单.md` | Seedance 2.0 禁用词和限制 |
-| `Seedance2-模板示例.md` | 优质 VideoPrompt 模板示例 |
-| `Seedance2-NotebookLM补充.md` | NotebookLM 知识库补充 |
-| `Seedance2提示词技巧大全.md` | 完整的提示词技巧汇总 |
+| `knowledge/seedance2/00-索引.md` | 快速导航索引 |
+| `knowledge/seedance2/01-完全创作攻略.md` | 完整创作指南（25,000字） |
+| `knowledge/seedance2/02-基础理论.md` | 核心提示词结构、对话技巧 |
+| `knowledge/seedance2/03-禁止清单.md` | 禁用词和限制 |
+| `knowledge/seedance2/04-模板示例.md` | 优质 VideoPrompt 模板示例 |
+| `knowledge/seedance2/05-NotebookLM补充.md` | 进阶技巧（口型同步等） |
+| `knowledge/seedance2/06-导演级运镜库.md` | 80个导演级运镜术语 |
+| `knowledge/seedance2/07-提示词与运镜指南.md` | 提示词公式与运镜指南 |
+
+> **历史位置：** `rules/Seedance2/` 和 `templates/knowledge/Seedance2*` 已合并到此（2026-04-17）
 
 ---
 

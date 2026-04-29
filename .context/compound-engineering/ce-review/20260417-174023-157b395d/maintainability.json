@@ -1,0 +1,128 @@
+{
+  "reviewer": "maintainability",
+  "findings": [
+    {
+      "title": "Phase0 Step0-图谱查询.md embeds MCP config inline instead of referencing mcp_config.json",
+      "severity": "P2",
+      "file": "agents/orchestrator/phases/Phase0/Step0-图谱查询.md",
+      "line": 13,
+      "why_it_matters": "Phase0-图谱查询.md (lines 13-21) contains a verbatim copy of the MCP server JSON, duplicating the content of mcp_config.json. This creates a maintenance hazard: if the graphify path changes, 5 files must be updated instead of 1. The other 4 Phase Step0 files correctly reference mcp_config.json.",
+      "autofix_class": "manual",
+      "owner": "review-fixer",
+      "requires_verification": false,
+      "suggested_fix": "Replace lines 13-21 in Phase0/Step0-图谱查询.md with: '通过 `mcp_config.json` 连接 graphify MCP server（连接方式见 Step0-图谱查询.md）。' — matching the pattern used in Phase1, Phase1.5, Phase2a, and Phase2b.",
+      "confidence": 0.85,
+      "evidence": [
+        "Phase0 Step0-图谱查询.md lines 13-21: inline JSON block",
+        "Phase1 Step0-图谱查询.md line 11: '通过 `mcp_config.json` 连接 graphify MCP server'",
+        "Phase1.5 Step0-图谱查询.md line 11: same reference pattern",
+        "Phase2a Step0-图谱查询.md line 11: same reference pattern",
+        "Phase2b Step0-图谱查询.md line 11: same reference pattern"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "Step0-图谱查询.md shared boilerplate is acceptable but 图谱溯源记录 section is copy-paste identical",
+      "severity": "P3",
+      "file": "agents/orchestrator/phases/Phase*/Step0-图谱查询.md",
+      "line": 0,
+      "why_it_matters": "5 Step0 files (383 lines total) share ~10 line header boilerplate (0.1 MCP connection, 0.3 traceability record, 0.4 next step). The queries ARE phase-specific (合规规则, 八场景类型, 运镜公式, 人物四视图, VideoPrompt格式), so content cannot be fully unified. However the 图谱溯源记录 markdown table is copy-paste identical across all 5 files with only source_location values changing. Extraction into a shared reference snippet would reduce maintenance.",
+      "autofix_class": "advisory",
+      "owner": "downstream-resolver",
+      "requires_verification": false,
+      "suggested_fix": "Consider creating a shared snippet (e.g., rules/common/Step0-图谱查询-模板.md) containing the shared structure, with each Phase's Step0 only defining the 4 phase-specific queries and the 图谱溯源记录 table.",
+      "confidence": 0.70,
+      "evidence": [
+        "Phase0 Step0-图谱查询.md: 117 lines, 4 queries",
+        "Phase1 Step0-图谱查询.md: 76 lines, 4 queries",
+        "Phase1.5 Step0-图谱查询.md: 59 lines, 4 queries",
+        "Phase2a Step0-图谱查询.md: 63 lines, 4 queries",
+        "Phase2b Step0-图谱查询.md: 68 lines, 4 queries",
+        "Total: 383 lines, shared boilerplate ~50 lines, 图谱溯源记录 table ~12 lines identical"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "graph.json has 344 nodes but 0 edges — disconnected knowledge graph limits traversal",
+      "severity": "P2",
+      "file": "graphify-out/graph.json",
+      "line": 1,
+      "why_it_matters": "The graph contains 344 nodes but no edges (relationships between nodes). A knowledge graph with no edges provides only flat keyword search, not semantic traversal. The plan document (Unit 2) states edges were added ('309→344 nodes, 318→367 edges') but the current file shows 0 edges. Without edges, graphify query cannot traverse relationships (e.g., 'show me all rules related to 人物四视图').",
+      "autofix_class": "manual",
+      "owner": "human",
+      "requires_verification": true,
+      "suggested_fix": "Re-run `/graphify` with --update mode to regenerate edges, or verify that the current graph.json was not corrupted during the last增量 update.",
+      "confidence": 0.75,
+      "evidence": [
+        "graphify-out/graph.json: Total nodes: 344, Total edges: 0",
+        "Plan Unit 2 states: '(309→344 nodes, 318→367 edges)'",
+        "Python analysis: `len(data.get('edges', [])) == 0'"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "Phase2a-主索引.md and Phase2b-主索引.md follow existing naming convention",
+      "severity": "P3",
+      "file": "agents/orchestrator/phases/Phase2a/Phase2a-主索引.md, agents/orchestrator/phases/Phase2b/Phase2b-主索引.md",
+      "line": 0,
+      "why_it_matters": "Phase2a-主索引.md and Phase2b-主索引.md are new files following the existing naming pattern established by Phase0-主索引.md, Phase1-主索引.md, Phase1.5-主索引.md, and Phase2-主索引.md. Naming is consistent. No issues found.",
+      "autofix_class": "advisory",
+      "owner": "review-fixer",
+      "requires_verification": false,
+      "suggested_fix": null,
+      "confidence": 0.95,
+      "evidence": [
+        "Existing pattern: Phase*/Phase*-主索引.md",
+        "New files: Phase2a/Phase2a-主索引.md, Phase2b/Phase2b-主索引.md",
+        "Both files verified: version header, 子模块索引 table, 输出文件清单, 版本历史"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "mcp_config.json structure is clean and follows MCP specification",
+      "severity": "P3",
+      "file": "mcp_config.json",
+      "line": 1,
+      "why_it_matters": "mcp_config.json is correctly structured with a single 'graphify' MCP server using absolute paths. No issues found.",
+      "autofix_class": "advisory",
+      "owner": "review-fixer",
+      "requires_verification": false,
+      "suggested_fix": null,
+      "confidence": 0.95,
+      "evidence": [
+        "Single 'graphify' server under mcpServers",
+        "Absolute path to Python venv: /Users/godxu/.local/pipx/venvs/graphifyy/bin/python",
+        "Correct args format: ['-m', 'graphify.serve', '<absolute-path-to-graph.json>']"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "graph.json node IDs are unique with no conflicts",
+      "severity": "P3",
+      "file": "graphify-out/graph.json",
+      "line": 1,
+      "why_it_matters": "344 nodes all have unique IDs following consistent snake_case pattern (e.g., 'knowledge_base_index', 'seedance2_basic_theory', 'compliance_officer_role'). No dedup issues found.",
+      "autofix_class": "advisory",
+      "owner": "review-fixer",
+      "requires_verification": false,
+      "suggested_fix": null,
+      "confidence": 0.95,
+      "evidence": [
+        "Python Counter analysis: all 344 node IDs unique",
+        "Sample IDs: 'knowledge_base_index', 'scene_template_guide', 'seedance2_prohibition_list'",
+        "No duplicates found"
+      ],
+      "pre_existing": false
+    }
+  ],
+  "residual_risks": [
+    "If graphify path changes, Phase0 Step0-图谱查询.md must be manually updated (inline JSON) while other phases auto-update via mcp_config.json reference",
+    "Without graph edges, semantic traversal queries will return flat keyword matches only, reducing the value of graphify integration",
+    "No automated test verifies that Step0-图谱查询.md files remain consistent with mcp_config.json after future updates"
+  ],
+  "testing_gaps": [
+    "No verification that graph.json edges were properly generated (current file shows 0 edges vs. plan's stated 318 edges)",
+    "No test that Phase0/Step0-图谱查询.md MCP config stays in sync with mcp_config.json",
+    "No test that all 5 Step0-图谱查询.md files follow the same reference pattern (Phase0 currently an outlier)"
+  ]
+}

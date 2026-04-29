@@ -1,0 +1,110 @@
+{
+  "reviewer": "learnings",
+  "findings": [
+    {
+      "title": "Step0-图谱查询.md already exists in all phases - no new file creation needed",
+      "severity": "P3",
+      "file": "agents/orchestrator/phases/Phase0/Step0-图谱查询.md",
+      "line": 1,
+      "why_it_matters": "The review context mentions adding Step0-图谱查询.md to 'all Phase execution docs', but Phase0, Phase1, Phase1.5, Phase2a, and Phase2b all already have this file. The graphify integration pattern is already established.",
+      "autofix_class": "advisory",
+      "owner": "human",
+      "requires_verification": false,
+      "suggested_fix": "Verify which specific phases need Step0-图谱查询.md rather than assuming new files are needed. All 5 phases already have the pattern implemented.",
+      "confidence": 0.95,
+      "evidence": [
+        "Phase0/Step0-图谱查询.md exists (3867 bytes, modified Apr 17 17:21)",
+        "Phase1/Step0-图谱查询.md exists (2296 bytes, modified Apr 17 17:22)",
+        "Phase1.5/Step0-图谱查询.md exists (1605 bytes, modified Apr 17 17:22)",
+        "Phase2a/Step0-图谱查询.md exists (1977 bytes, modified Apr 17 17:22)",
+        "Phase2b/Step0-图谱查询.md exists (2039 bytes, modified Apr 17 17:22)"
+      ],
+      "pre_existing": true
+    },
+    {
+      "title": "mcp_config.json graphify MCP server already configured",
+      "severity": "P3",
+      "file": "mcp_config.json",
+      "line": 1,
+      "why_it_matters": "The project already has a graphify MCP server configured pointing to graphify-out/graph.json. No new mcp_config.json creation is needed.",
+      "autofix_class": "advisory",
+      "owner": "human",
+      "requires_verification": false,
+      "suggested_fix": "Reuse existing mcp_config.json: {command: '/Users/godxu/.local/pipx/venvs/graphifyy/bin/python', args: ['-m', 'graphify.serve', '/Users/godxu/02-workspace/animation-v3/graphify-out/graph.json']}",
+      "confidence": 0.98,
+      "evidence": [
+        "mcp_config.json exists at project root with graphify server configured",
+        "Graphify server command: /Users/godxu/.local/pipx/venvs/graphifyy/bin/python",
+        "Graph endpoint: graphify-out/graph.json"
+      ],
+      "pre_existing": true
+    },
+    {
+      "title": "Graph only covers knowledge/ and rules/ - agents/ not yet indexed",
+      "severity": "P3",
+      "file": "graphify-out/GRAPH_REPORT.md",
+      "line": 130,
+      "why_it_matters": "The GRAPH_REPORT.md shows incremental update notes: 'Next: Unit 3 (agents/orchestrator/roles/)' - meaning agents/orchestrator/roles/ content is not yet in the graph. The review mentions extending graph.json with rules/ and agents/, but rules/ is already done.",
+      "autofix_class": "advisory",
+      "owner": "human",
+      "requires_verification": false,
+      "suggested_fix": "Run graphify /graphify skill to index agents/orchestrator/roles/ directory to complete Unit 3. Templates (templates/) also appears to be unindexed based on manifest.json only showing knowledge/ files.",
+      "confidence": 0.9,
+      "evidence": [
+        "GRAPH_REPORT.md line 130: 'Next: Unit 3 (agents/orchestrator/roles/)'",
+        "manifest.json shows only knowledge/ files indexed",
+        "Graph has 309 nodes from knowledge/ (92) + rules/ (221)"
+      ],
+      "pre_existing": true
+    },
+    {
+      "title": "Established Step0-图谱查询.md pattern with 4 key sections",
+      "severity": "P3",
+      "file": "agents/orchestrator/phases/Phase0/Step0-图谱查询.md",
+      "line": 1,
+      "why_it_matters": "The existing Step0-图谱查询.md files follow a consistent 4-section pattern: 0.1 MCP connection, 0.2 mandatory queries with expected returns, 0.3 source tracking table, 0.4 transition to Step 1. Any new additions should follow this established pattern.",
+      "autofix_class": "advisory",
+      "owner": "human",
+      "requires_verification": false,
+      "suggested_fix": "When adding graph queries to any phase, follow the established pattern: 0.1 Connect via mcp_config.json, 0.2 List 3-4 queries with expected return format, 0.3 Document source_location tracking, 0.4 Transition to Step 1 with carry-forward items",
+      "confidence": 0.95,
+      "evidence": [
+        "All Step0 files follow identical 4-section structure",
+        "Phase0 Step0: 4 queries (禁用词正则, 禁止行为清单, 8项自检, 平台合规)",
+        "Phase1 Step0: 4 queries (八场景类型, 场景模板索引, 审美偏好, 风格一致性)",
+        "Phase1.5 Step0: 4 queries (运镜公式, 镜头衔接, 运镜知识, 导演级运镜)",
+        "Phase2a Step0: 4 queries (四视图格式, 风格一致性, 人物一致性, 禁止词正则)",
+        "Phase2b Step0: 4 queries (VideoPrompt格式, 双轨生成, 禁止行为, Negative Prompt)"
+      ],
+      "pre_existing": true
+    },
+    {
+      "title": "Graph community structure supports 8-audit-dimension queries from audit agent",
+      "severity": "P3",
+      "file": "graphify-out/GRAPH_REPORT.md",
+      "line": 33,
+      "why_it_matters": "The graph has a Community 2 '质量门禁与审核' with nodes including D1-人物一致性, D7-运镜专业度, and '八维度审核' (10 edges). This suggests the knowledge graph can support the audit agent's 8-dimension review pattern described in agents/audit/",
+      "autofix_class": "advisory",
+      "owner": "human",
+      "requires_verification": false,
+      "suggested_fix": "Consider extending Phase3 (audit agent) to also have Step0-图谱查询.md following the same pattern, querying the 8 audit dimensions from the graph before executing audit steps.",
+      "confidence": 0.85,
+      "evidence": [
+        "Community 2 contains: D3-动作连贯性, D1-人物一致性, D7-运镜专业度",
+        "Node '八维度审核 (eight_audit_dimensions)' has 10 edges",
+        "agents/audit/ has 8 dimension modules in agents/audit/dimensions/"
+      ],
+      "pre_existing": true
+    }
+  ],
+  "residual_risks": [
+    "Graph coverage gap: agents/orchestrator/roles/ and templates/ not yet indexed in graph.json (only knowledge/ and rules/ are indexed)",
+    "Step0-图谱查询.md already exists in all phases - potential unnecessary work if creating duplicates",
+    "mcp_config.json already exists - no need for new configuration file"
+  ],
+  "testing_gaps": [
+    "No verification that graph queries in Step0-图谱查询.md return expected results matching source files",
+    "No automated test to confirm graph.json is synchronized with source rules/ and knowledge/ files",
+    "Phase3 (audit agent) lacks Step0-图谱查询.md despite audit dimensions being indexed in graph"
+  ]
+}

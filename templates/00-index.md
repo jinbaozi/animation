@@ -78,8 +78,7 @@
 | `好莱坞光影体系.md` | 光影设计 |
 | `好莱坞导演技法.md` | 分镜创作 |
 | `好莱坞配音体系.md` | 配音导演（预留） |
-| `Seedance2导演级运镜库.md` | Seedance 运镜参考 |
-| `Seedance2提示词与运镜完全指南.md` | Seedance Prompt 指南 |
+| **Seedance2** | **见 `knowledge/seedance2/` 统一索引** |
 
 ### output/ 输出模板
 

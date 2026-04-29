@@ -1,0 +1,147 @@
+{
+  "reviewer": "testing",
+  "findings": [
+    {
+      "title": "source_location values are section fragments, not valid file paths",
+      "severity": "P0",
+      "file": "graphify-out/graph.json",
+      "line": 0,
+      "why_it_matters": "All 114 source_location values are Chinese section names (e.g., '禁用词正则部分', '镜头类型部分') rather than valid file paths. The Step0 docs' traceability tables claim these map to files like 'rules/Seedance2/Seedance2-禁止清单.md', but the actual values cannot be used to locate source files. This breaks the stated requirement: '图谱查询溯源记录需附加在最终合规预审报告中' — the provenance record is unverifiable.",
+      "autofix_class": "manual",
+      "owner": "downstream-resolver",
+      "requires_verification": true,
+      "suggested_fix": "source_location should contain actual file paths (e.g., 'rules/Seedance2/Seedance2-禁止清单.md') not section names. The Step0溯源记录 tables in all 4 Step0-图谱查询.md files list correct-looking paths but the graph.json source_location values do not match. Need to re-index graph with correct source_location values, or the Step0 docs' traceability tables are producing false claims of traceability.",
+      "confidence": 0.95,
+      "evidence": [
+        "Node 'forbidden_regex' has source_location='禁用词正则部分' but the Step0溯源记录 table claims it maps to 'rules/Seedance2/Seedance2-禁止清单.md'",
+        "Node 'seedance2_unified_formula' has source_location='统一公式部分' but Step0 claims 'rules/Seedance2/'",
+        "All 114 nodes with source_location have section-fragment values, not paths",
+        "Checking paths via os.path.join(base, sl) for all 114 nodes yields 0 valid file paths"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "graph.json has no edges — provenance/relationship data missing",
+      "severity": "P1",
+      "file": "graphify-out/graph.json",
+      "line": 0,
+      "why_it_matters": "The graph contains 344 nodes but 0 edges. The Step0 docs describe graph queries with an implicit semantic network (e.g., '查询禁用词正则表达式 → returns prohibition_regex node'). Without edges, the graphify MCP tool cannot traverse relationships or validate query paths. This may cause queries to fall back to full-text search rather than graph traversal, defeating the purpose of graph-based knowledge retrieval.",
+      "autofix_class": "advisory",
+      "owner": "downstream-resolver",
+      "requires_verification": true,
+      "suggested_fix": "Re-index source documents with graphify's full extraction (including edge/relationship creation), or document that the graph is node-only and queries should use keyword/semantic search rather than graph traversal.",
+      "confidence": 0.85,
+      "evidence": [
+        "Total edges: 0 (confirmed via python3 json parsing)",
+        "All 344 nodes have no 'source_location' pointing to valid files",
+        "The Step0 files describe graph queries expecting a semantic network, but the graph lacks relational structure"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "Step0-图谱查询.md Phase 1 source_location table entries do not match graph reality",
+      "severity": "P1",
+      "file": "agents/orchestrator/phases/Phase1/Step0-图谱查询.md",
+      "line": 63,
+      "why_it_matters": "The 溯源记录 table in Phase1/Step0-图谱查询.md lists '八场景类型 → knowledge/' and '场景模板索引 → knowledge/' as source_location values. The graph.json has 'eight_scene_types' and 'scene_template_guide' nodes with source_file='knowledge/02-场景模板指南.md' and source_location=null. The table claims traceability but provides no actual file path.",
+      "autofix_class": "manual",
+      "owner": "downstream-resolver",
+      "requires_verification": true,
+      "suggested_fix": "Update the 溯源记录 tables in all 4 Step0-图谱查询.md files to show actual source_file values (from graph.json) instead of vague 'knowledge/' directory references. Or remove the source_location column from the tables if it cannot be populated correctly.",
+      "confidence": 0.9,
+      "evidence": [
+        "Phase1 Step0 line 63-69 table: source_location='knowledge/' (incomplete path)",
+        "graph.json node 'eight_scene_types' has source_location=null, source_file='knowledge/02-场景模板指南.md'",
+        "Same pattern across all 4 Step0 docs — all have incomplete or missing source_location values in tables"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "mcp_config.json uses absolute path to graphify Python env — not portable",
+      "severity": "P2",
+      "file": "mcp_config.json",
+      "line": 5,
+      "why_it_matters": "The mcp_config.json contains an absolute path '/Users/godxu/.local/pipx/venvs/graphifyy/bin/python' which will break on any other machine or if the venv is relocated. The Step0 docs reference this config as '连接方式见 Step0-图谱查询.md', but the config itself is not validated or checked into the repo.",
+      "autofix_class": "advisory",
+      "owner": "downstream-resolver",
+      "requires_verification": true,
+      "suggested_fix": "Use a relative path or environment variable substitution in mcp_config.json, or document that this file must be customized per deployment environment. Consider adding mcp_config.json to .gitignore and providing a mcp_config.json.example template.",
+      "confidence": 0.8,
+      "evidence": [
+        "mcp_config.json line 5: command path is '/Users/godxu/.local/pipx/venvs/graphifyy/bin/python'",
+        "mcp_config.json is untracked in git (?? mcp_config.json in git status)"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "Phase 1.5 Step0-图谱查询.md source_location table has empty/incomplete paths",
+      "severity": "P2",
+      "file": "agents/orchestrator/phases/Phase1.5/Step0-图谱查询.md",
+      "line": 45,
+      "why_it_matters": "The 溯源记录 table for Phase 1.5 lists source_location as 'rules/Seedance2/' (directory only, no file) for 运镜公式 and 导演级运镜, and 'rules/运镜知识.md' for 镜头衔接规则. The graph.json shows the actual source_file values are in knowledge/seedance2/ files, not rules/Seedance2/. The table is stale.",
+      "autofix_class": "manual",
+      "owner": "downstream-resolver",
+      "requires_verification": true,
+      "suggested_fix": "Update Phase1.5/Step0-图谱查询.md source_location column to reflect actual graph.json source_file values (knowledge/seedance2/06-导演级运镜库.md etc.)",
+      "confidence": 0.85,
+      "evidence": [
+        "Table at line 45-53: source_location for '运镜公式' = 'rules/Seedance2/' (directory only, not a file)",
+        "graph.json shows 'director_level_camera_techniques' has source_file='knowledge/seedance2/06-导演级运镜库.md'",
+        "graph.json shows 'combination_lens_formula' has source_file='knowledge/seedance2/06-导演级运镜库.md'"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "rules/00-index.md update references non-existent knowledge/seedance2/ directory structure in table",
+      "severity": "P2",
+      "file": "rules/00-index.md",
+      "line": 50,
+      "why_it_matters": "The updated rules/00-index.md (line 46-62) claims Seedance2 docs are at 'knowledge/seedance2/00-索引.md', 'knowledge/seedance2/01-完全创作攻略.md', etc. While these files DO exist in the repo (verified via ls), the graph.json still has many nodes with source_file pointing to the old rules/Seedance2/ location, creating a mismatch between the index documentation and the actual graph.",
+      "autofix_class": "advisory",
+      "owner": "downstream-resolver",
+      "requires_verification": true,
+      "suggested_fix": "After updating rules/00-index.md to point to knowledge/seedance2/, run /graphify to re-index all Seedance2 content so graph.json source_file values are consistent with the new directory layout. Without re-indexing, graph queries will return stale source_file paths.",
+      "confidence": 0.8,
+      "evidence": [
+        "rules/00-index.md diff shows new paths knowledge/seedance2/0X-*.md",
+        "graph.json still has ~80+ nodes with source_file='rules/Seedance2/...' (verified via python3 search)",
+        "Files do exist at knowledge/seedance2/ (verified via ls), but graph.json was not updated to reference them"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "Step0-图谱查询.md files copy-paste identical MCP connection instructions without validation",
+      "severity": "P3",
+      "file": "agents/orchestrator/phases/Phase0/Step0-图谱查询.md",
+      "line": 9,
+      "why_it_matters": "All 4 Step0-图谱查询.md files (Phase0, Phase1, Phase1.5, Phase2a, Phase2b) have identical '0.1 连接 MCP Server' sections stating '连接方式见 Step0-图谱查询.md'. This circular reference chain means if the MCP connection method changes, all 5 files must be updated. Additionally, no file actually describes HOW to test the MCP connection — only that Claude Code '自动处理 stdio 通信'.",
+      "autofix_class": "advisory",
+      "owner": "release",
+      "requires_verification": true,
+      "suggested_fix": "Extract MCP connection instructions into a single shared file (e.g., docs/mcp-connection.md) and have all Step0 files reference it. Add a connection validation step (e.g., 'run graphify query \"test\" to verify connection').",
+      "confidence": 0.7,
+      "evidence": [
+        "Phase0 Step0 line 11: '通过 mcp_config.json 连接 graphify MCP server'",
+        "Phase1 Step0 line 11: '通过 mcp_config.json 连接 graphify MCP server（连接方式见 Step0-图谱查询.md）'",
+        "Phase2a Step0 line 11: same reference pattern",
+        "No file actually validates or tests the MCP connection — only describes the config"
+      ],
+      "pre_existing": false
+    }
+  ],
+  "residual_risks": [
+    "Graph nodes without valid source_location cannot be verified against source files — any graph query result's provenance is unverifiable",
+    "No edges in graph.json means graph traversal queries degrade to semantic search — may return incorrect/nonspecific results",
+    "Stale source_file references in graph.json (rules/Seedance2/ vs knowledge/seedance2/) will cause confusion when tracing query results",
+    "mcp_config.json not tracked in git — configuration drift between collaborators is likely",
+    "Step0-图谱查询.md files are documentation-only — no mechanism to verify that the graph actually contains the data the queries claim to return"
+  ],
+  "testing_gaps": [
+    "No test files exist in this repo (rules/templates library, no executable code) — testing is manual/documentation review",
+    "No verification that graphify MCP server actually starts and serves queries correctly from mcp_config.json",
+    "No verification that graph.json contains the data needed to answer all 4 Step0 query types (compliance rules, scene types, camera techniques, prompt formats)",
+    "No verification that source_location values in graph.json correspond to resolvable file paths or actual document sections",
+    "No integration test that a Phase Agent can successfully query the graph and receive correct, traceable results",
+    "Coverage gap: 230 out of 344 nodes (67%) have no source_location at all — the documentation traceability story only applies to 114 nodes"
+  ]
+}

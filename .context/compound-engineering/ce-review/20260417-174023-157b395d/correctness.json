@@ -1,0 +1,105 @@
+{
+  "reviewer": "correctness",
+  "findings": [
+    {
+      "title": "Phase2a Step0 references non-existent file rules/人物四视图格式.md",
+      "severity": "P1",
+      "file": "agents/orchestrator/phases/Phase2a/Step0-图谱查询.md",
+      "line": 53,
+      "why_it_matters": "The source_location for '人物四视图格式' points to a file that does not exist in the rules/ directory. This will cause溯源 verification to fail and may confuse executors trying to reference the source document.",
+      "autofix_class": "manual",
+      "owner": "review-fixer",
+      "requires_verification": true,
+      "suggested_fix": "Change source_location from 'rules/人物四视图格式.md' to 'templates/reference/人物基准模版.md'. The 人物四视图 format specification is documented in templates/reference/人物基准模版.md, not in rules/.",
+      "confidence": 0.90,
+      "evidence": [
+        "File rules/人物四视图格式.md does not exist (confirmed via ls of rules/ directory)",
+        "The 四视图 format specification exists in templates/reference/人物基准模版.md",
+        "The graph node name '人物四视图格式' is an abstraction, not a literal file path"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "Phase2a Step0 has incomplete source_location for 人物一致性控制",
+      "severity": "P2",
+      "file": "agents/orchestrator/phases/Phase2a/Step0-图谱查询.md",
+      "line": 55,
+      "why_it_matters": "The source_location column for '人物一致性控制' only contains 'rules/' which is an incomplete path. This does not point to a specific file and will fail溯源 verification.",
+      "autofix_class": "manual",
+      "owner": "review-fixer",
+      "requires_verification": true,
+      "suggested_fix": "Change source_location from 'rules/' to a specific file that contains 人物一致性控制 guidance. Based on the graph report showing '一致性控制' as a community hub, this information may exist in rules/风格一致性.md or rules/质量门禁.md - verify and update accordingly.",
+      "confidence": 0.85,
+      "evidence": [
+        "Source location 'rules/' is a directory, not a file path",
+        "GRAPH_REPORT.md shows '一致性控制 (一致性控制)' as a community hub node",
+        "No specific file named '人物一致性控制.md' exists in rules/"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "Phase1 Step0 has non-specific source_location for 八场景类型",
+      "severity": "P3",
+      "file": "agents/orchestrator/phases/Phase1/Step0-图谱查询.md",
+      "line": 67,
+      "why_it_matters": "The source_location for '八场景类型' is just 'knowledge/' without a specific file. While this may be acceptable for knowledge base nodes, it reduces traceability compared to Phase0 which uses specific file paths.",
+      "autofix_class": "advisory",
+      "owner": "downstream-resolver",
+      "requires_verification": false,
+      "suggested_fix": "Consider updating source_location to a more specific path if 八场景类型 is documented in a specific file under knowledge/. The graph report shows '八场景类型系统' as a community hub node (Community 11), suggesting it may be extracted from a specific source.",
+      "confidence": 0.70,
+      "evidence": [
+        "Source location 'knowledge/' is a directory, not a file path",
+        "GRAPH_REPORT.md shows '八场景类型系统' as a hyperedge with 8 scene types",
+        "Phase0 Step0 uses specific file paths (rules/Seedance2/Seedance2-禁止清单.md) while Phase1 uses directory paths"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "Phase1.5 Step0 has non-specific source_locations for Seedance2 queries",
+      "severity": "P3",
+      "file": "agents/orchestrator/phases/Phase1.5/Step0-图谱查询.md",
+      "line": 51,
+      "why_it_matters": "The source_locations for '运镜公式' and '导演级运镜' both point to 'rules/Seedance2/' without specific files. While Seedance2/ contains multiple relevant files, this reduces traceability.",
+      "autofix_class": "advisory",
+      "owner": "downstream-resolver",
+      "requires_verification": false,
+      "suggested_fix": "Consider specifying more precise source files: '运镜公式' could reference 'rules/Seedance2/Seedance2提示词技巧大全.md' or 'templates/knowledge/Seedance2导演级运镜库.md', and '导演级运镜' should similarly point to a specific file.",
+      "confidence": 0.70,
+      "evidence": [
+        "rules/Seedance2/ contains multiple files: Seedance2-基础理论.md, Seedance2-模板示例.md, Seedance2-禁止清单.md, Seedance2-NotebookLM补充.md, Seedance2提示词技巧大全.md",
+        "GRAPH_REPORT.md shows '运镜知识' as a hub node with connections to rules/",
+        "templates/knowledge/Seedance2导演级运镜库.md exists but is not referenced"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "MCP config JSON is valid but uses absolute path",
+      "severity": "P3",
+      "file": "mcp_config.json",
+      "line": 1,
+      "why_it_matters": "The mcp_config.json uses an absolute path to the Python executable which may not be portable across different systems or users. The graph.json path is also absolute.",
+      "autofix_class": "advisory",
+      "owner": "downstream-resolver",
+      "requires_verification": false,
+      "suggested_fix": "For portability, consider using environment variables or relative paths. However, if this config is only for local use by the current user, the absolute path is acceptable.",
+      "confidence": 0.85,
+      "evidence": [
+        "mcp_config.json line 17: '/Users/godxu/.local/pipx/venvs/graphifyy/bin/python' is an absolute path",
+        "mcp_config.json line 18: '/Users/godxu/02-workspace/animation-v3/graphify-out/graph.json' is an absolute path",
+        "Standard MCP server configs often use relative paths for portability"
+      ],
+      "pre_existing": false
+    }
+  ],
+  "residual_risks": [
+    "Phase2a Step0 references to non-existent files will cause graph溯源 verification to fail if not corrected before execution",
+    "The incomplete 'rules/' path for 人物一致性控制 will break traceability in Phase2a",
+    "Non-specific source_locations in Phase1 and Phase1.5 reduce the usefulness of graph溯源 for audit purposes"
+  ],
+  "testing_gaps": [
+    "No verification that graph.json actually contains the nodes referenced by the Step0 queries (e.g., 人物四视图格式, 人物一致性控制)",
+    "No test that the MCP server config actually works with the graphify MCP server",
+    "No test that Step0-图谱查询.md files are properly integrated into their parent Phase execution flows beyond just being listed in the index"
+  ]
+}
