@@ -45,12 +45,13 @@
 
 | Phase | 执行角色 | 模板 |
 |-------|---------|------|
+| G0 | 编排师 | `templates/output/project-manifest模板.md` |
 | Phase 0 | 品控合规官 | `templates/output/合规预审报告.md` |
-| Phase 1 | 内容总导演 | `templates/knowledge/好莱坞导演技法.md` |
-| Phase 1.5 | 镜头序列设计师 | `templates/scene/[场景类型].md` + `templates/knowledge/好莱坞剪辑语言.md` + `templates/knowledge/好莱坞运镜库.md` |
-| Phase 2a | 美术技术总监 | `templates/output/人物四视图Prompt包.md` + `templates/output/场景资产卡.md` + `templates/reference/人物基准模版.md` |
-| Phase 2b | 美术技术总监 | `templates/output/VideoPrompt包-规范.md` + `templates/output/VideoPrompt包-示例.md` + `templates/output/VideoPrompt包-工具适配.md` + `templates/reference/场景基准模版.md` |
-| Phase 3-5 | （预留） | 由编排师按需索引，待扩展 |
+| Phase 1 | 内容总导演 | `templates/output/StoryIR模板.md` + `templates/knowledge/好莱坞导演技法.md` |
+| Phase 1.5 | 镜头序列设计师 | `templates/output/ShotIR模板.md` + `templates/scene/[场景类型].md` + `templates/knowledge/好莱坞剪辑语言.md` + `templates/knowledge/好莱坞运镜库.md` |
+| Phase 2a | 美术技术总监 | `templates/output/VisualAnchorIR模板.md` + `templates/output/人物四视图Prompt包.md` + `templates/output/场景资产卡.md` + `templates/reference/人物基准模版.md` |
+| Phase 2b | 美术技术总监 | `templates/output/PromptExportIR模板.md` + `templates/output/ToolExport-Seedance2.md` + `templates/output/ToolExport-即梦.md` + `templates/output/ToolExport-中文审阅版.md` |
+| Audit Gate | 审核智能体 | `agents/audit/templates/audit-report.md` + `agents/audit/templates/score-sheet.md` |
 
 ---
 
@@ -84,6 +85,14 @@
 
 | 模板 | 产出阶段 |
 |------|---------|
+| `project-manifest模板.md` | G0 项目配置 |
+| `StoryIR模板.md` | Phase 1 |
+| `ShotIR模板.md` | Phase 1.5 |
+| `VisualAnchorIR模板.md` | Phase 2a |
+| `PromptExportIR模板.md` | Phase 2b |
+| `ToolExport-Seedance2.md` | Phase 2b 工具导出 |
+| `ToolExport-即梦.md` | Phase 2b 工具导出 |
+| `ToolExport-中文审阅版.md` | Phase 2b 人类审阅 |
 | `人物四视图Prompt包.md` | Phase 2a |
 | `场景资产卡.md` | Phase 2a |
 | `VideoPrompt包-规范.md` | Phase 2b（规范、规则全集） |

@@ -80,23 +80,23 @@ AUDIT_TASK="## 审核任务
 
 ### 任务要求
 
-1. 加载主编排器: agents/audit-agent.md
+1. 加载主编排器: agents/audit/audit-agent.md
 2. 按执行流程执行审核:
-   - Phase 1: 产物收集（读取 $INPUT_DIR 下所有产物）
+   - Audit Step 1: 产物收集（读取 $INPUT_DIR 下所有产物）
    - Phase 2: 规则引擎预检（8维度并行）
    - Phase 3: LLM细审
    - Phase 4: 报告汇总
 
 3. 产物清单（按需加载）:
-   - 剧本.md → agents/audit/dimensions/04-narrative-logic.md
-   - 基础分镜执行表.md → agents/audit/dimensions/04-narrative-logic.md
-   - 增强分镜执行表.md → agents/audit/dimensions/03-action-coherence.md, 05-expression-precision.md, 06-dialogue-interaction.md, 07-cinematography.md
-   - 序列衔接与继承表.md → agents/audit/dimensions/03-action-coherence.md
-   - 人物清单.md → agents/audit/dimensions/01-character-consistency.md
-   - 人物四视图Prompt包.md → agents/audit/dimensions/01-character-consistency.md, 08-world-building.md
-   - 场景清单.md → agents/audit/dimensions/02-scene-consistency.md
-   - 场景资产卡.md → agents/audit/dimensions/02-scene-consistency.md
-   - VideoPrompt包.md → agents/audit/dimensions/01-character-consistency.md, 02-scene-consistency.md, 03-action-coherence.md, 05-expression-precision.md, 06-dialogue-interaction.md, 07-cinematography.md, 08-world-building.md
+   - 00-项目配置/project-manifest.md → 全局配置
+   - 02-Phase1-剧本分镜/StoryIR.md → agents/audit/dimensions/04-narrative-logic.md
+   - 03-Phase1.5-镜头序列/ShotIR.md → agents/audit/dimensions/03-action-coherence.md, 05-expression-precision.md, 06-dialogue-interaction.md, 07-cinematography.md
+   - 04-Phase2a-四视图/VisualAnchorIR.md → agents/audit/dimensions/01-character-consistency.md, 02-scene-consistency.md, 08-world-building.md
+   - 04-Phase2a-四视图/人物资产卡.md → agents/audit/dimensions/01-character-consistency.md, 08-world-building.md
+   - 04-Phase2a-四视图/场景资产卡.md → agents/audit/dimensions/02-scene-consistency.md
+   - 05-Phase2b-Prompt/PromptExportIR.md → agents/audit/dimensions/01-character-consistency.md, 02-scene-consistency.md, 03-action-coherence.md, 05-expression-precision.md, 06-dialogue-interaction.md, 07-cinematography.md, 08-world-building.md
+   - 05-Phase2b-Prompt/VideoPrompt包-中文版.md → 全维度
+   - 05-Phase2b-Prompt/VideoPrompt包-英文版.md → 全维度
 
 4. 加载规则引擎: agents/audit/rules/audit-rules.md
 5. 加载评分计算表: agents/audit/templates/score-sheet.md
@@ -110,7 +110,8 @@ AUDIT_TASK="## 审核任务
 3. 问题清单（P0/P1/P2分级）
 4. 维度详细分析
 5. 修复优先级建议
-6. 附录
+6. 对三类核心交付物（VideoPrompt包、人物资产卡、场景资产卡）的放行结论
+7. 附录
 
 请开始执行审核任务。"
 

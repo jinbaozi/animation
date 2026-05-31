@@ -1,6 +1,6 @@
 # Phase 2b - 美术技术总监执行指令（VideoPrompt）
 
-> 版本：v1.1
+> 版本：v2.0
 > 创建日期：2026-04-04
 > 执行角色：AI美术技术总监
 > **v1.1更新**：增加图谱查询步骤（Step 0）
@@ -13,8 +13,8 @@
 |------|------|
 | Phase | Phase 2b |
 | 执行角色 | AI美术技术总监 |
-| 输入 | 增强分镜执行表.md + 人物四视图Prompt包.md + 场景资产卡 |
-| 输出 | VideoPrompt包（中文版 + 英文版） |
+| 输入 | Prompt Export 所需输入：VisualAnchorIR.md + ShotIR.md + 人物资产卡.md + 场景资产卡.md |
+| 输出 | PromptExportIR.md + VideoPrompt包（中文版 + 英文版）+ Tool Export |
 | 执行时长 | 约60-120分钟 |
 
 ---
@@ -42,8 +42,10 @@
 
 | 文件 | 格式 | 必填 |
 |------|------|------|
+| PromptExportIR.md | Markdown表格 | 是 |
 | VideoPrompt包-中文版.md | Markdown | 是 |
 | VideoPrompt包-英文版.md | Markdown | 是 |
+| ToolExport/ | 目录 | 可选（按 target_tools） |
 
 ---
 
@@ -51,5 +53,6 @@
 
 | 版本 | 日期 | 修改内容 |
 |------|------|---------|
+| v2.0 | 2026-05-31 | 新增 Prompt Export IR 与 Tool Export 输出 |
 | v1.0.0 | 2026-04-04 | 初始版本 |
 | v1.1 | 2026-04-17 | 增加 Step 0 图谱查询步骤 |

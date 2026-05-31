@@ -7,8 +7,13 @@ review/
 # LLM usage plans and specs
 docs/superpowers/
 
+# Isolated implementation worktrees
+.worktrees/
+
 # Output directories (auto-generated)
 output/
+!templates/output/
+!templates/output/*.md
 
 # Backup files
 *.bak

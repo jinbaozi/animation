@@ -200,7 +200,7 @@ def generate_shot_prompt(shot_num, scene_num, scene_type, camera, action, emotio
 
 def main():
     """Main generation function"""
-    output_path = "/Users/godxu/02-workspace/animation-v3/output/开局一张弓装备就变强/05-Phase2b-视频提示词/VideoPrompt包.md"
+    output_path = "/Users/godxu/02-workspace/animation-v3/output/开局一张弓装备就变强/05-Phase2b-Prompt/VideoPrompt包-中文版.md"
 
     # Header
     header = """# VideoPrompt包

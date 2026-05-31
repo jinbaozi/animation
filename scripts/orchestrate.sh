@@ -149,7 +149,8 @@ run_phase0() {
 
   print_info "找到小说: $NOVEL_FILE"
 
-  # 创建Phase 0输出目录
+  # 创建G0/Phase 0输出目录
+  mkdir -p "$PROJECT_DIR/00-项目配置"
   mkdir -p "$PROJECT_DIR/01-Phase0-合规预审"
 
   # 获取小说文件内容（用于Claude Code任务）
@@ -162,22 +163,25 @@ run_phase0() {
 
 **项目名**: $PROJECT
 **小说文件**: $NOVEL_FILE
+**项目配置输出**: $PROJECT_DIR/00-项目配置/project-manifest.md
 **输出目录**: $PROJECT_DIR/01-Phase0-合规预审
 
 ### 任务要求
 
-1. 加载品控合规官角色定义: agents/orchestrator/phases/Phase0/Phase0-主索引.md
-2. **【强制】先执行 Step0-图谱查询.md**：通过 mcp_config.json 连接 graphify MCP server，查询合规规则（禁用词正则、禁止行为清单、生成前8项自检、平台合规规则），记录 source_location 溯源
-3. 加载执行步骤:
+1. 加载中间表示规范: rules/中间表示规范.md
+2. 先生成或更新 project manifest: templates/output/project-manifest模板.md
+3. 加载品控合规官角色定义: agents/orchestrator/phases/Phase0/Phase0-主索引.md
+4. **【强制】先执行 Step0-图谱查询.md**：通过 mcp_config.json 连接 graphify MCP server，查询合规规则（禁用词正则、禁止行为清单、生成前8项自检、平台合规规则），记录 source_location 溯源
+5. 加载执行步骤:
    - Step1-接收解析.md
    - Step2-合规审核.md
    - Step3-评分标准.md
    - Step4-问题分类.md
    - Step5-生成报告.md
-4. 加载质量标准: Phase0-质量标准.md
-5. 读取小说文件内容
-6. 执行合规预审
-7. 生成合规预审报告到: $PROJECT_DIR/01-Phase0-合规预审/合规预审报告.md
+6. 加载质量标准: Phase0-质量标准.md
+7. 读取小说文件内容
+8. 执行合规预审
+9. 生成合规预审报告到: $PROJECT_DIR/01-Phase0-合规预审/合规预审报告.md
 
 ### 小说内容
 
@@ -190,6 +194,7 @@ $NOVEL_CONTENT
 2. 问题清单（如有）
 3. 修改建议（如有）
 4. 评分（0-10）
+5. 交付范围：VideoPrompt包 + 人物资产卡 + 场景资产卡
 
 请开始执行。"
 
@@ -237,6 +242,7 @@ run_phase1() {
 6. 读取原始小说
 7. 执行剧本改编和分镜设计
 8. 生成产出物到 $PROJECT_DIR/02-Phase1-剧本分镜/:
+   - StoryIR.md
    - 剧本.md
    - 基础分镜执行表.md
    - 人物清单.md
@@ -300,6 +306,7 @@ run_phase1_5() {
 5. 读取 Phase 1 产出
 6. 设计增强分镜序列
 7. 生成产出物到 $PROJECT_DIR/03-Phase1.5-镜头序列/:
+   - ShotIR.md
    - 增强分镜执行表.md
    - 序列衔接与继承表.md
 
@@ -327,7 +334,7 @@ $SCENES
 run_phase2a() {
   print_status "Phase 2a" "美术技术总监 - 人物四视图与场景资产"
 
-  mkdir -p "$PROJECT_DIR/04-Phase2a-风格四视图"
+  mkdir -p "$PROJECT_DIR/04-Phase2a-四视图"
 
   # 检查Phase 1.5产出是否存在
   if [ ! -f "$PROJECT_DIR/03-Phase1.5-镜头序列/增强分镜执行表.md" ]; then
@@ -347,7 +354,7 @@ run_phase2a() {
 **项目名**: $PROJECT
 **Phase 1.5 产出**: $PROJECT_DIR/03-Phase1.5-镜头序列/
 **Phase 1 产出**: $PROJECT_DIR/02-Phase1-剧本分镜/
-**输出目录**: $PROJECT_DIR/04-Phase2a-风格四视图
+**输出目录**: $PROJECT_DIR/04-Phase2a-四视图
 
 ### 任务要求
 
@@ -360,8 +367,10 @@ run_phase2a() {
 4. 加载质量标准: Phase2a/Phase2a-质量标准.md
 5. 读取人物清单.md 和场景清单.md
 6. 读取增强分镜执行表.md
-7. 生成人物四视图Prompt包和场景资产卡
-8. 生成产出物到 $PROJECT_DIR/04-Phase2a-风格四视图/:
+7. 生成 VisualAnchorIR、人物资产卡、人物四视图Prompt包和场景资产卡
+8. 生成产出物到 $PROJECT_DIR/04-Phase2a-四视图/:
+   - VisualAnchorIR.md
+   - 人物资产卡.md
    - 人物四视图Prompt包.md
    - 场景资产卡.md
 
@@ -391,17 +400,20 @@ $STORYBOARD
 run_phase2b() {
   print_status "Phase 2b" "美术技术总监 - VideoPrompt生成"
 
-  mkdir -p "$PROJECT_DIR/05-Phase2b-Prompt生成"
+  mkdir -p "$PROJECT_DIR/05-Phase2b-Prompt"
 
   # 检查Phase 2a产出是否存在
-  if [ ! -f "$PROJECT_DIR/04-Phase2a-风格四视图/人物四视图Prompt包.md" ]; then
+  if [ ! -f "$PROJECT_DIR/04-Phase2a-四视图/人物资产卡.md" ]; then
     print_error "Phase 2a 产出不存在，请先执行 Phase 2a"
     return 1
   fi
 
   # 获取所有必要内容
-  local CHAR_PROMPTS=$(cat "$PROJECT_DIR/04-Phase2a-风格四视图/人物四视图Prompt包.md")
-  local SCENE_ASSETS=$(cat "$PROJECT_DIR/04-Phase2a-风格四视图/场景资产卡.md")
+  local VISUAL_IR=$(cat "$PROJECT_DIR/04-Phase2a-四视图/VisualAnchorIR.md")
+  local CHARACTER_ASSETS=$(cat "$PROJECT_DIR/04-Phase2a-四视图/人物资产卡.md")
+  local CHAR_PROMPTS=$(cat "$PROJECT_DIR/04-Phase2a-四视图/人物四视图Prompt包.md")
+  local SCENE_ASSETS=$(cat "$PROJECT_DIR/04-Phase2a-四视图/场景资产卡.md")
+  local SHOT_IR=$(cat "$PROJECT_DIR/03-Phase1.5-镜头序列/ShotIR.md")
   local STORYBOARD=$(cat "$PROJECT_DIR/03-Phase1.5-镜头序列/增强分镜执行表.md")
 
   local CLAUDE_TASK="## Phase 2b 任务：美术技术总监（VideoPrompt）
@@ -409,8 +421,8 @@ run_phase2b() {
 执行美术技术总监 Phase 2b 任务：
 
 **项目名**: $PROJECT
-**Phase 2a 产出**: $PROJECT_DIR/04-Phase2a-风格四视图/
-**输出目录**: $PROJECT_DIR/05-Phase2b-Prompt生成
+**Phase 2a 产出**: $PROJECT_DIR/04-Phase2a-四视图/
+**输出目录**: $PROJECT_DIR/05-Phase2b-Prompt
 
 ### 任务要求
 
@@ -422,12 +434,13 @@ run_phase2b() {
    - Step3-VideoPrompt生成.md
 4. 加载双轨生成规则: Phase2b/双轨生成规则.md
 5. 加载质量标准: Phase2b/Phase2b-质量标准.md
-6. 读取人物四视图Prompt包.md 和场景资产卡.md
-7. 读取增强分镜执行表.md
-8. 生成VideoPrompt包
-9. 生成产出物到 $PROJECT_DIR/05-Phase2b-Prompt生成/:
-   - 视频Prompt包-中文版/视频Prompt包.md
-   - 视频Prompt包-英文版/VideoPrompt.md
+6. 读取 VisualAnchorIR.md、人物资产卡.md、人物四视图Prompt包.md 和 场景资产卡.md
+7. 读取 ShotIR.md 和增强分镜执行表.md
+8. 先生成 PromptExportIR.md，再从 PromptExportIR 导出 VideoPrompt包
+9. 生成产出物到 $PROJECT_DIR/05-Phase2b-Prompt/:
+   - PromptExportIR.md
+   - VideoPrompt包-中文版.md
+   - VideoPrompt包-英文版.md
 
 ### 关键格式要求
 
@@ -436,9 +449,15 @@ run_phase2b() {
 - 镜头：[景别]+[运镜方式]+[运动速度]
 - 动作：[具体物理动作描述，使用现在时态]
 
-禁止使用: [0-3s] 格式（AI不识别）
+具体时间戳格式以 project-manifest.md 中的 tool profile 为准，不得让工具格式覆盖 PromptExportIR 字段契约。
 
 ### 输入内容
+
+**VisualAnchorIR.md**:
+$VISUAL_IR
+
+**人物资产卡.md**:
+$CHARACTER_ASSETS
 
 **人物四视图Prompt包.md**:
 $CHAR_PROMPTS
@@ -448,6 +467,9 @@ $SCENE_ASSETS
 
 **增强分镜执行表.md**:
 $STORYBOARD
+
+**ShotIR.md**:
+$SHOT_IR
 
 请开始执行。"
 

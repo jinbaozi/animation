@@ -1,7 +1,7 @@
-# AI审核智能体 — 主编排器
+# AI审核智能体 — Audit Gate 主编排器
 
-> 状态：v1.0 | 版本：v2.0 | 日期：2026-04-06
-> **触发时机**：Phase 2b完成后自动触发
+> 状态：v3.0 | 日期：2026-05-31
+> **触发时机**：Phase 2b 完成后，最终交付前
 
 ---
 
@@ -13,13 +13,14 @@
 - 独立于品控合规官的第三方深度审核
 - 混合架构：规则引擎预筛 + LLM细审
 - 8维度结构化审核报告
+- 正式交付门禁：通过后才进入 `99-最终交付物/`
 
 ---
 
 ## 2. 触发条件
 
 ### 自动触发
-当检测到 `output/{项目名}/` 目录存在时，自动执行审核。
+当检测到 `output/{项目名}/05-Phase2b-Prompt/PromptExportIR.md` 与核心交付物存在时，自动执行审核。
 
 ### 手动触发
 ```
@@ -32,15 +33,15 @@
 
 | 产物 | 位置 | 审核维度 |
 |------|------|---------|
-| 剧本.md | output/{项目名}/ | D4 |
-| 基础分镜执行表.md | output/{项目名}/ | D4 |
-| 增强分镜执行表.md | output/{项目名}/ | D3/D5/D6/D7 |
-| 序列衔接与继承表.md | output/{项目名}/ | D3 |
-| 人物清单.md | output/{项目名}/ | D1 |
-| 人物四视图Prompt包.md | output/{项目名}/ | D1/D8 |
-| 场景清单.md | output/{项目名}/ | D2 |
-| 场景资产卡.md | output/{项目名}/ | D2 |
-| VideoPrompt包.md | output/{项目名}/ | D1-D8（全维度）|
+| project-manifest.md | `00-项目配置/` | 全局 |
+| StoryIR.md | `02-Phase1-剧本分镜/` | D4 |
+| ShotIR.md | `03-Phase1.5-镜头序列/` | D3/D5/D6/D7 |
+| VisualAnchorIR.md | `04-Phase2a-四视图/` | D1/D2/D8 |
+| 人物资产卡.md | `04-Phase2a-四视图/` | D1/D8 |
+| 场景资产卡.md | `04-Phase2a-四视图/` | D2 |
+| PromptExportIR.md | `05-Phase2b-Prompt/` | D1-D8（全维度） |
+| VideoPrompt包-中文版.md | `05-Phase2b-Prompt/` | D1-D8（全维度） |
+| VideoPrompt包-英文版.md | `05-Phase2b-Prompt/` | D1-D8（全维度） |
 
 ---
 
@@ -161,14 +162,11 @@
 ## 7. 协同关系
 
 ```
-Phase 0 → Phase 1 → Phase 1.5 → Phase 2a → Phase 2b
-    │                                      │
-    └───────── AI品控合规官 ────────────────┘
-                                              │
-                          ┌───────────────────┘
-                          ▼
-                    独立审核智能体（自动触发）
-                          │
-                          ▼
-                    review/审核报告
+G0 → Phase 0 → Phase 1 → Phase 1.5 → Phase 2a → Phase 2b
+                                                     │
+                                                     ▼
+                                              Audit Gate
+                                                     │
+                                                     ▼
+                     VideoPrompt包 + 人物资产卡 + 场景资产卡
 ```

@@ -1,6 +1,6 @@
 # 编排师 — 角色职责规范
 
-> 状态：已确认 | 版本：v1.3 | 日期：2026-04-09
+> 状态：已确认 | 版本：v2.0 | 日期：2026-05-31
 > **轻量入口**：详细状态机、返工机制、输入包组装规则见 `docs/编排师操作手册.md`
 > **角色定义**：详细角色定义见 `roles/orchestrator-role.md`
 
@@ -70,19 +70,36 @@
 用户提交任务
     │
     ▼
-Phase 0（品控合规官）→ Phase 1（内容总导演）→ Phase 1.5（镜头序列设计师）
-    → Phase 2a（美术技术总监）→ Phase 2b（美术技术总监）→ 完成
+G0（项目配置）→ Phase 0（品控合规官）→ Phase 1（Story IR + 剧本）
+    → Phase 1.5（Shot IR + 镜头连续性）
+    → Phase 2a（Visual Anchor IR + 人物/场景资产卡）
+    → Phase 2b（Prompt Export IR + Tool Export）
+    → Audit Gate → 完成
 ```
 
 ### 3.2 Phase 输入输出映射
 
 | Phase | 执行角色 | 输入 | 输出 |
 |-------|---------|------|------|
-| Phase 0 | 品控合规官 | 小说文本 | 合规预审报告 |
-| Phase 1 | 内容总导演 | 合规通过的小说 | 剧本 + 基础分镜执行表 |
-| Phase 1.5 | 镜头序列设计师 | 基础分镜执行表 | 增强分镜执行表 |
-| Phase 2a | 美术技术总监 | 增强分镜执行表 | 人物四视图Prompt包 + 场景资产卡 |
-| Phase 2b | 美术技术总监 | 人物四视图Prompt包 + 场景资产卡 | VideoPrompt包 |
+| G0 | 编排师 | 小说文本 + 用户需求 | `project-manifest.md` |
+| Phase 0 | 品控合规官 | 小说文本 + project manifest | 合规预审报告 |
+| Phase 1 | 内容总导演 | 合规通过的小说 + project manifest | Story IR + 剧本 + 基础分镜执行表 + 人物清单 + 场景清单 |
+| Phase 1.5 | 镜头序列设计师 | Story IR + 基础分镜执行表 | Shot IR + 增强分镜执行表 + 序列衔接与继承表 |
+| Phase 2a | 美术技术总监 | Shot IR + 人物清单 + 场景清单 | Visual Anchor IR + 人物资产卡 + 场景资产卡 + 人物四视图Prompt包 |
+| Phase 2b | 美术技术总监 | Visual Anchor IR + Shot IR | Prompt Export IR + 多工具 VideoPrompt 导出 |
+| Audit Gate | 审核智能体 | 全部 IR + 资产卡 + 导出包 | 审核报告 + 返工清单或通过结论 |
+
+### 3.3 最终交付边界
+
+本项目正式交付物为：
+
+1. `完整VideoPrompt包-中文版.md`
+2. `完整VideoPrompt包-英文版.md`
+3. `人物资产卡.md`
+4. `场景资产卡.md`
+5. `交付检查清单.md`
+
+其中前三项中的 `VideoPrompt包`、`人物资产卡`、`场景资产卡` 是核心交付物。成片生成、配音合成、上线发布、版权证书和后期剪辑不属于当前主流程。
 
 ---
 
@@ -147,6 +164,7 @@ fswatch input/项目名/           # macOS
 
 | 版本 | 日期 | 变更内容 |
 |------|------|---------|
+| v2.0 | 2026-05-31 | 收敛为 VideoPrompt + 人物资产卡 + 场景资产卡交付，新增 G0/IR/Audit Gate 流程 |
 | v1.3 | 2026-04-06 | 新增三种触发方式（Slash命令/对话式/目录监测） |
 | v1.2 | 2026-04-04 | 轻量化重构，移除详细状态机内容，引用外部文件 |
 | v1.1 | 2026-04-04 | 优化状态机、门禁规则、输入包组装与阻塞输出模板 |

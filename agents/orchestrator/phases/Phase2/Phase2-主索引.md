@@ -11,8 +11,8 @@
 
 | Phase | 执行角色 | 输入 | 输出 | 时长 |
 |-------|---------|------|------|------|
-| Phase 2a | AI美术技术总监 | 增强分镜执行表 + 序列衔接表 | 人物四视图Prompt包 + 场景资产卡 | 约60分钟 |
-| Phase 2b | AI美术技术总监 | Phase 2a输出 | VideoPrompt包 + 试生成素材 | 约60分钟 |
+| Phase 2a | AI美术技术总监 | Shot IR + 增强分镜执行表 + 序列衔接表 | VisualAnchorIR + 人物资产卡 + 场景资产卡 + 人物四视图Prompt包 | 约60分钟 |
+| Phase 2b | AI美术技术总监 | VisualAnchorIR + ShotIR + 人物/场景资产卡 | PromptExportIR + VideoPrompt包 + Tool Export | 约60分钟 |
 
 ---
 
@@ -33,9 +33,10 @@ Phase2a/
 
 | 输入 | 输出 |
 |------|------|
+| 人物清单.md | 人物资产卡.md |
+| 场景清单.md | 场景资产卡.md |
+| ShotIR.md | VisualAnchorIR.md |
 | 人物清单.md | 人物四视图Prompt包.md |
-| 增强分镜执行表.md | 场景资产卡.md |
-| 序列衔接表.md | |
 
 ---
 
@@ -57,9 +58,10 @@ Phase2b/
 
 | 输入 | 输出 |
 |------|------|
-| Phase 2a人物四视图Prompt包 | VideoPrompt包.md |
-| Phase 2a场景资产卡 | 试生成素材 |
-| 增强分镜执行表.md | |
+| VisualAnchorIR.md | PromptExportIR.md |
+| ShotIR.md | VideoPrompt包-中文版.md |
+| 人物资产卡.md | VideoPrompt包-英文版.md |
+| 场景资产卡.md | ToolExport/ |
 | rules/审美偏好.md | |
 | rules/风格一致性.md | |
 | rules/双轨生成.md | |
@@ -71,9 +73,13 @@ Phase2b/
 
 | Phase | 文件 | 格式 | 必填 |
 |-------|------|------|------|
+| 2a | VisualAnchorIR.md | Markdown | 是 |
+| 2a | 人物资产卡.md | Markdown | 是 |
 | 2a | 人物四视图Prompt包.md | Markdown | 是 |
 | 2a | 场景资产卡.md | Markdown表格 | 是 |
-| 2b | VideoPrompt包.md | Markdown | 是 |
+| 2b | PromptExportIR.md | Markdown | 是 |
+| 2b | VideoPrompt包-中文版.md | Markdown | 是 |
+| 2b | VideoPrompt包-英文版.md | Markdown | 是 |
 
 ---
 

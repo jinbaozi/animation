@@ -1,33 +1,34 @@
-# Phase 3: 审核智能体
+# Audit Gate: VideoPrompt 交付审核
 
-> 状态：v1.0 | 日期：2026-04-06
-> **执行时机**：Phase 2b完成后
+> 状态：v2.0 | 日期：2026-05-31
+> **执行时机**：Phase 2b完成后，最终交付前
+> 路径兼容：当前仍位于 `agents/audit/Phase3/`，但流程定位是 Audit Gate，不属于成片 Phase 3。
 
 ---
 
 ## 概述
 
-Phase 3 审核智能体负责对 Phase 2b 产出的所有物料进行系统性质量审核，确保符合质量门禁标准后方可交付。
+Audit Gate 负责对 IR、工具导出和三类核心交付物进行系统性质量审核，确保符合质量门禁标准后方可进入 `99-最终交付物/`。
 
 ## 执行前确认
 
 - [ ] Phase 2b 已完成
 - [ ] output/{项目名}/ 目录存在
-- [ ] 包含所有必需产物
+- [ ] 包含 `VideoPrompt包`、`人物资产卡`、`场景资产卡`
 
 ### 必需产物清单
 
 | 产物 | 位置 |
 |------|------|
-| 剧本.md | output/{项目名}/ |
-| 基础分镜执行表.md | output/{项目名}/ |
-| 增强分镜执行表.md | output/{项目名}/ |
-| 序列衔接与继承表.md | output/{项目名}/ |
-| 人物清单.md | output/{项目名}/ |
-| 人物四视图Prompt包.md | output/{项目名}/ |
-| 场景清单.md | output/{项目名}/ |
-| 场景资产卡.md | output/{项目名}/ |
-| VideoPrompt包.md | output/{项目名}/ |
+| project-manifest.md | `00-项目配置/` |
+| StoryIR.md | `02-Phase1-剧本分镜/` |
+| ShotIR.md | `03-Phase1.5-镜头序列/` |
+| VisualAnchorIR.md | `04-Phase2a-四视图/` |
+| 人物资产卡.md | `04-Phase2a-四视图/` |
+| 场景资产卡.md | `04-Phase2a-四视图/` |
+| PromptExportIR.md | `05-Phase2b-Prompt/` |
+| VideoPrompt包-中文版.md | `05-Phase2b-Prompt/` |
+| VideoPrompt包-英文版.md | `05-Phase2b-Prompt/` |
 
 ---
 

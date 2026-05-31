@@ -8,18 +8,21 @@
 ## Phase 执行顺序
 
 ```
-Phase 0（品控合规官）→ Phase 1（内容总导演）→ Phase 1.5（镜头序列设计师）
-                                                              │
-                                                              ▼
-                                              Phase 2a（美术技术总监）
-                                                              │
-                                                              ▼
-                                              Phase 2b（美术技术总监）→ 完成
+G0（项目配置）→ Phase 0（品控合规官）→ Phase 1（Story IR + 剧本）
+→ Phase 1.5（Shot IR + 镜头连续性）→ Phase 2a（Visual Anchor IR + 人物/场景资产卡）
+→ Phase 2b（Prompt Export IR + Tool Export）→ Audit Gate → 完成
 ```
 
 ---
 
 ## 执行文档索引
+
+### G0：项目配置
+
+| 文档 | 位置 |
+|------|------|
+| Project Manifest 模板 | `../../templates/output/project-manifest模板.md` |
+| 中间表示规范 | `../../rules/中间表示规范.md` |
 
 ### Phase 0：品控合规官
 
@@ -38,6 +41,7 @@ Phase 0（品控合规官）→ Phase 1（内容总导演）→ Phase 1.5（镜�
 | 文档 | 位置 |
 |------|------|
 | 主索引 | `phases/Phase1/Phase1-主索引.md` |
+| Story IR 模板 | `../../templates/output/StoryIR模板.md` |
 | 质量标准 | `phases/Phase1/Phase1-质量标准.md` |
 | Step1-接收准备 | `phases/Phase1/Step1-接收准备.md` |
 | Step2-剧本改编 | `phases/Phase1/Step2-剧本改编.md` |
@@ -48,6 +52,7 @@ Phase 0（品控合规官）→ Phase 1（内容总导演）→ Phase 1.5（镜�
 | 文档 | 位置 |
 |------|------|
 | 主索引 | `phases/Phase1.5/Phase1.5-主索引.md` |
+| Shot IR 模板 | `../../templates/output/ShotIR模板.md` |
 | 质量标准 | `phases/Phase1.5/Phase1.5-质量标准.md` |
 | Step1-镜头序列设计 | `phases/Phase1.5/Step1-镜头序列设计.md` |
 | Step2-序列衔接表 | `phases/Phase1.5/Step2-序列衔接表.md` |
@@ -57,6 +62,7 @@ Phase 0（品控合规官）→ Phase 1（内容总导演）→ Phase 1.5（镜�
 | 文档 | 位置 |
 |------|------|
 | 主索引 | `phases/Phase2/Phase2-主索引.md` |
+| Visual Anchor IR 模板 | `../../templates/output/VisualAnchorIR模板.md` |
 | 四视图模板 | `phases/Phase2a/四视图模板.md` |
 | 质量标准 | `phases/Phase2a/Phase2a-质量标准.md` |
 | Step1-人物分析 | `phases/Phase2a/Step1-人物分析.md` |
@@ -68,6 +74,10 @@ Phase 0（品控合规官）→ Phase 1（内容总导演）→ Phase 1.5（镜�
 | 文档 | 位置 |
 |------|------|
 | 主索引 | `phases/Phase2/Phase2-主索引.md` |
+| Prompt Export IR 模板 | `../../templates/output/PromptExportIR模板.md` |
+| Tool Export - Seedance2 | `../../templates/output/ToolExport-Seedance2.md` |
+| Tool Export - 即梦 | `../../templates/output/ToolExport-即梦.md` |
+| Tool Export - 中文审阅版 | `../../templates/output/ToolExport-中文审阅版.md` |
 | 双轨生成规则 | `phases/Phase2b/双轨生成规则.md` |
 | 质量标准 | `phases/Phase2b/Phase2b-质量标准.md` |
 | VideoPrompt模板 | `phases/Phase2b/VideoPrompt模板.md` |
@@ -94,6 +104,7 @@ Phase 0（品控合规官）→ Phase 1（内容总导演）→ Phase 1.5（镜�
 | 文件 | 位置 | 说明 |
 |------|------|------|
 | 编排师职责 | `orchestrator.md` | 编排智能体主入口 |
+| 编排师角色定义 | `roles/orchestrator-role.md` | 编排师 canonical role |
 | 本索引 | `00-index.md` | 本文档 |
 
 ---

@@ -1,6 +1,6 @@
-# Step1: 产物收集
+# Step1: Audit Gate 产物收集
 
-> Phase 3-审核智能体第一步
+> Audit Gate 第一步
 
 ---
 
@@ -16,15 +16,15 @@
 
 | 产物 | 文件名 |
 |------|--------|
-| 剧本 | 剧本.md |
-| 基础分镜 | 基础分镜执行表.md |
-| 增强分镜 | 增强分镜执行表.md |
-| 序列衔接 | 序列衔接与继承表.md |
-| 人物清单 | 人物清单.md |
-| 人物四视图 | 人物四视图Prompt包.md |
-| 场景清单 | 场景清单.md |
-| 场景资产 | 场景资产卡.md |
-| 视频提示词 | VideoPrompt包.md |
+| 项目配置 | 00-项目配置/project-manifest.md |
+| Story IR | 02-Phase1-剧本分镜/StoryIR.md |
+| Shot IR | 03-Phase1.5-镜头序列/ShotIR.md |
+| Visual Anchor IR | 04-Phase2a-四视图/VisualAnchorIR.md |
+| 人物资产 | 04-Phase2a-四视图/人物资产卡.md |
+| 场景资产 | 04-Phase2a-四视图/场景资产卡.md |
+| Prompt Export IR | 05-Phase2b-Prompt/PromptExportIR.md |
+| 中文 VideoPrompt | 05-Phase2b-Prompt/VideoPrompt包-中文版.md |
+| 英文 VideoPrompt | 05-Phase2b-Prompt/VideoPrompt包-英文版.md |
 
 ### 1.2 读取产物内容
 
