@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from sqlalchemy import DateTime, ForeignKey, JSON, String, Text
+from sqlalchemy.ext.mutable import MutableDict
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -22,7 +23,7 @@ class Project(Base):
     output_dir: Mapped[str] = mapped_column(Text, nullable=False)
     current_phase: Mapped[str] = mapped_column(String(40), default="g0")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 
     phases: Mapped[list["Phase"]] = relationship(back_populates="project", cascade="all, delete-orphan")
 
@@ -34,9 +35,9 @@ class Phase(Base):
     project_id: Mapped[int] = mapped_column(ForeignKey("projects.id"), nullable=False)
     phase_id: Mapped[str] = mapped_column(String(40), nullable=False)
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="pending")
-    output_files: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
-    validation: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    output_files: Mapped[dict[str, Any]] = mapped_column(MutableDict.as_mutable(JSON), default=dict)
+    validation: Mapped[dict[str, Any]] = mapped_column(MutableDict.as_mutable(JSON), default=dict)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 
     project: Mapped[Project] = relationship(back_populates="phases")
 
@@ -61,7 +62,7 @@ class ModelConfig(Base):
     base_url: Mapped[str] = mapped_column(Text, nullable=False)
     model_name: Mapped[str] = mapped_column(String(200), nullable=False)
     encrypted_key_id: Mapped[int | None] = mapped_column(ForeignKey("encrypted_keys.id"), nullable=True)
-    default_params: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
+    default_params: Mapped[dict[str, Any]] = mapped_column(MutableDict.as_mutable(JSON), default=dict)
 
 
 class Job(Base):
@@ -89,5 +90,5 @@ class Generation(Base):
     model_config_id: Mapped[int | None] = mapped_column(ForeignKey("model_configs.id"), nullable=True)
     output_path: Mapped[str | None] = mapped_column(Text, nullable=True)
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="pending")
-    params: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
+    params: Mapped[dict[str, Any]] = mapped_column(MutableDict.as_mutable(JSON), default=dict)
     error_message: Mapped[str | None] = mapped_column(Text, nullable=True)
