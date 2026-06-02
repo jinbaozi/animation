@@ -526,6 +526,61 @@ run_full_pipeline() {
   echo ""
 }
 
+# 执行指定单个Phase
+run_single_phase() {
+  local PHASE_RUNNER=""
+  local PHASE_LABEL=""
+
+  case "$PHASE" in
+    0|phase0)
+      PHASE_RUNNER="run_phase0"
+      PHASE_LABEL="Phase 0"
+      ;;
+    1|phase1)
+      PHASE_RUNNER="run_phase1"
+      PHASE_LABEL="Phase 1"
+      ;;
+    1.5|phase1_5|phase1.5)
+      PHASE_RUNNER="run_phase1_5"
+      PHASE_LABEL="Phase 1.5"
+      ;;
+    2a|phase2a)
+      PHASE_RUNNER="run_phase2a"
+      PHASE_LABEL="Phase 2a"
+      ;;
+    2b|phase2b)
+      PHASE_RUNNER="run_phase2b"
+      PHASE_LABEL="Phase 2b"
+      ;;
+    *)
+      print_error "unsupported phase: $PHASE"
+      exit 1
+      ;;
+  esac
+
+  print_banner
+
+  echo -e "${YELLOW}项目:${NC} $PROJECT"
+  echo -e "${YELLOW}模式:${NC} 单Phase"
+  echo -e "${YELLOW}Phase:${NC} $PHASE"
+  echo ""
+
+  check_claude
+
+  if ! "$PHASE_RUNNER"; then
+    print_error "$PHASE_LABEL 执行失败"
+    exit 1
+  fi
+
+  echo ""
+  echo -e "${GREEN}============================================${NC}"
+  echo -e "${GREEN}     $PHASE_LABEL 执行完成！${NC}"
+  echo -e "${GREEN}============================================${NC}"
+  echo ""
+  echo "输出目录: $PROJECT_DIR/"
+  echo ""
+}
+
 # 目录监测模式
 run_watch_mode() {
   print_banner
@@ -577,6 +632,8 @@ run_watch_mode() {
 main() {
   if [ "$WATCH_MODE" = true ]; then
     run_watch_mode
+  elif [ -n "$PHASE" ]; then
+    run_single_phase
   else
     run_full_pipeline
   fi
