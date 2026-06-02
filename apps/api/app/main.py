@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 from app.core.config import get_settings
 from app.core.database import create_sqlite_engine, init_db
+from app.routers.assets import router as assets_router
 from app.routers.phases import router as phases_router
 from app.routers.projects import router as projects_router
 
@@ -21,6 +22,7 @@ def create_app() -> FastAPI:
 
     app.include_router(projects_router)
     app.include_router(phases_router)
+    app.include_router(assets_router)
 
     return app
 
