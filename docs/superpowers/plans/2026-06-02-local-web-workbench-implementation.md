@@ -1481,7 +1481,7 @@ git commit -m "feat: add video task export"
 - Create: `apps/web/src/pages/ProjectsPage.tsx`
 - Create: `apps/web/src/__tests__/ProjectsPage.test.tsx`
 
-- [ ] **Step 1: Create frontend package files**
+- [x] **Step 1: Create frontend package files**
 
 Create `apps/web/package.json`:
 
@@ -1567,7 +1567,7 @@ export default defineConfig({
 });
 ```
 
-- [ ] **Step 2: Write project page test**
+- [x] **Step 2: Write project page test**
 
 Create `apps/web/src/__tests__/ProjectsPage.test.tsx`:
 
@@ -1594,7 +1594,7 @@ describe("ProjectsPage", () => {
 });
 ```
 
-- [ ] **Step 3: Implement frontend source files**
+- [x] **Step 3: Implement frontend source files**
 
 Create `apps/web/src/types.ts`:
 
@@ -1681,7 +1681,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 );
 ```
 
-- [ ] **Step 4: Run frontend tests**
+- [x] **Step 4: Run frontend tests**
 
 Run:
 
@@ -1693,7 +1693,7 @@ npm test
 
 Expected: `ProjectsPage` test passes.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/web

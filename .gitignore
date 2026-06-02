@@ -40,3 +40,8 @@ noval-tmp/
 
 # Graphify script cache
 scripts/graphify-out/
+
+# Frontend build artifacts and dependencies
+apps/web/node_modules/
+apps/web/dist/
+apps/web/.vite/
