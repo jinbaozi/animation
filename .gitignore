@@ -5,7 +5,10 @@
 review/
 
 # LLM usage plans and specs
-docs/superpowers/
+docs/superpowers/*
+!docs/superpowers/specs/
+!docs/superpowers/specs/*.md
+.superpowers/
 
 # Isolated implementation worktrees
 .worktrees/
