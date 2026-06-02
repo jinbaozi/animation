@@ -57,6 +57,32 @@ def test_create_project_structure_rejects_existing_project_before_overwrite(
     assert result.novel_path.read_text(encoding="utf-8") == "original"
 
 
+def test_create_project_structure_atomically_rejects_existing_project_root(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    project_dir = tmp_path / "demo-project"
+    project_dir.mkdir()
+    original_exists = Path.exists
+
+    def fake_exists(path: Path) -> bool:
+        if path == project_dir:
+            return False
+        return original_exists(path)
+
+    monkeypatch.setattr(Path, "exists", fake_exists)
+
+    with pytest.raises(FileExistsError):
+        create_project_structure(
+            output_root=tmp_path,
+            project_name="Demo Project",
+            novel_filename="novel.txt",
+            novel_content="replacement",
+        )
+
+    assert not (project_dir / "00-原始素材" / "novel.txt").exists()
+
+
 @pytest.mark.parametrize("reserved_filename", ["", ".", ".."])
 def test_create_project_structure_uses_default_name_for_reserved_filenames(
     tmp_path: Path,

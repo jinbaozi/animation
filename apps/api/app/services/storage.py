@@ -46,8 +46,12 @@ def create_project_structure(
 ) -> ProjectStructure:
     slug = project_slug(project_name)
     project_dir = output_root / slug
-    if project_dir.exists():
-        raise FileExistsError(f"project directory already exists: {project_dir}")
+    try:
+        project_dir.mkdir(parents=True, exist_ok=False)
+    except FileExistsError as exc:
+        raise FileExistsError(
+            f"project directory already exists: {project_dir}"
+        ) from exc
 
     for relative_dir in PHASE_DIRS:
         (project_dir / relative_dir).mkdir(parents=True, exist_ok=True)
