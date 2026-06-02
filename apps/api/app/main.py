@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 from app.core.config import get_settings
 from app.core.database import create_sqlite_engine, init_db
+from app.routers.phases import router as phases_router
 from app.routers.projects import router as projects_router
 
 
@@ -19,6 +20,7 @@ def create_app() -> FastAPI:
         return {"status": "ok", "service": "animation-v3-api"}
 
     app.include_router(projects_router)
+    app.include_router(phases_router)
 
     return app
 
