@@ -5,6 +5,7 @@ from app.core.database import create_sqlite_engine, init_db
 from app.routers.assets import router as assets_router
 from app.routers.phases import router as phases_router
 from app.routers.projects import router as projects_router
+from app.routers.video_tasks import router as video_tasks_router
 
 
 def create_app() -> FastAPI:
@@ -23,6 +24,7 @@ def create_app() -> FastAPI:
     app.include_router(projects_router)
     app.include_router(phases_router)
     app.include_router(assets_router)
+    app.include_router(video_tasks_router)
 
     return app
 

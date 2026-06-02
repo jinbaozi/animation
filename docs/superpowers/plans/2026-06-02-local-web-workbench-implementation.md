@@ -1312,7 +1312,7 @@ git commit -m "feat: add image generation service"
 - Modify: `apps/api/app/main.py`
 - Create: `apps/api/tests/test_video_tasks.py`
 
-- [ ] **Step 1: Write video task export tests**
+- [x] **Step 1: Write video task export tests**
 
 Create `apps/api/tests/test_video_tasks.py`:
 
@@ -1339,7 +1339,7 @@ def test_export_video_tasks_writes_json_and_csv(tmp_path: Path):
     assert "Wu Wei draws the bow." in result.csv_path.read_text(encoding="utf-8")
 ```
 
-- [ ] **Step 2: Run the test and verify it fails**
+- [x] **Step 2: Run the test and verify it fails**
 
 Run:
 
@@ -1350,7 +1350,7 @@ python -m pytest tests/test_video_tasks.py -v
 
 Expected: fail because video task service does not exist.
 
-- [ ] **Step 3: Implement video task exporter**
+- [x] **Step 3: Implement video task exporter**
 
 Create `apps/api/app/services/video_tasks.py`:
 
@@ -1403,7 +1403,7 @@ def export_video_tasks(project_dir: Path) -> VideoTaskExport:
     return VideoTaskExport(json_path=json_path, csv_path=csv_path)
 ```
 
-- [ ] **Step 4: Register video task router contract**
+- [x] **Step 4: Register video task router contract**
 
 Create `apps/api/app/routers/video_tasks.py`:
 
@@ -1447,7 +1447,7 @@ def create_app() -> FastAPI:
 app = create_app()
 ```
 
-- [ ] **Step 5: Run video task tests**
+- [x] **Step 5: Run video task tests**
 
 Run:
 
@@ -1458,7 +1458,7 @@ python -m pytest tests/test_video_tasks.py tests/test_health.py -v
 
 Expected: all tests pass.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add apps/api/app/services/video_tasks.py apps/api/app/routers/video_tasks.py apps/api/app/main.py apps/api/tests/test_video_tasks.py
