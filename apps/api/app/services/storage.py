@@ -46,10 +46,14 @@ def create_project_structure(
 ) -> ProjectStructure:
     slug = project_slug(project_name)
     project_dir = output_root / slug
+    if project_dir.exists():
+        raise FileExistsError(f"project directory already exists: {project_dir}")
+
     for relative_dir in PHASE_DIRS:
         (project_dir / relative_dir).mkdir(parents=True, exist_ok=True)
 
-    safe_filename = Path(novel_filename).name or "novel.txt"
+    basename = Path(novel_filename).name
+    safe_filename = "novel.txt" if basename in {"", ".", ".."} else basename
     novel_path = project_dir / "00-原始素材" / safe_filename
     novel_path.write_text(novel_content, encoding="utf-8")
 
