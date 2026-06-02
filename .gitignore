@@ -23,6 +23,11 @@ output/
 # Backup files
 *.bak
 
+# Python generated files
+__pycache__/
+.pytest_cache/
+*.egg-info/
+
 # OS files
 .DS_Store
 .gstack/
