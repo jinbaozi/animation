@@ -32,3 +32,11 @@ apps/api/*.db
 # OS files
 .DS_Store
 .gstack/
+
+# Autonomous session logs and intermediate artifacts
+.remember/logs/
+graphify-out/
+noval-tmp/
+
+# Graphify script cache
+scripts/graphify-out/
