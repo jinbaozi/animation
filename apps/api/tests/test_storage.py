@@ -1,11 +1,23 @@
 from pathlib import Path
 
+import pytest
+
 from app.services.storage import PHASE_DIRS, create_project_structure, project_slug
 
 
 def test_project_slug_normalizes_ascii_and_keeps_chinese():
     assert project_slug("开局一张弓 装备就变强!") == "开局一张弓-装备就变强"
     assert project_slug("Demo Project") == "demo-project"
+
+
+def test_project_slug_removes_punctuation():
+    assert project_slug("Demo.Project") == "demoproject"
+    assert project_slug("Demo_Project") == "demoproject"
+
+
+def test_project_slug_rejects_punctuation_only_names():
+    with pytest.raises(ValueError):
+        project_slug("!!!...")
 
 
 def test_create_project_structure_writes_expected_dirs_and_novel(tmp_path: Path):

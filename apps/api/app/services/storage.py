@@ -29,7 +29,7 @@ class ProjectStructure:
 def project_slug(name: str) -> str:
     lowered = name.strip().lower()
     replaced = re.sub(r"\s+", "-", lowered)
-    cleaned = re.sub(r"[^\w\u4e00-\u9fff.-]+", "", replaced)
+    cleaned = re.sub(r"[^a-z0-9\u4e00-\u9fff-]+", "", replaced)
     cleaned = re.sub(r"-{2,}", "-", cleaned).strip("-")
     if not cleaned:
         raise ValueError(
