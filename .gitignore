@@ -27,6 +27,7 @@ output/
 __pycache__/
 .pytest_cache/
 *.egg-info/
+apps/api/*.db
 
 # OS files
 .DS_Store
