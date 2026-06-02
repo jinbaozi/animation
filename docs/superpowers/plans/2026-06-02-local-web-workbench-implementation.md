@@ -48,7 +48,7 @@ Create these focused units:
 - Create: `apps/api/app/core/config.py`
 - Create: `apps/api/tests/test_health.py`
 
-- [ ] **Step 1: Create the backend package files**
+- [x] **Step 1: Create the backend package files**
 
 Create `apps/api/pyproject.toml`:
 
@@ -81,7 +81,7 @@ pythonpath = ["."]
 
 Create `apps/api/app/__init__.py` as an empty file.
 
-- [ ] **Step 2: Write the failing health test**
+- [x] **Step 2: Write the failing health test**
 
 Create `apps/api/tests/test_health.py`:
 
@@ -103,7 +103,7 @@ def test_health_returns_ok():
     }
 ```
 
-- [ ] **Step 3: Run the test and verify it fails**
+- [x] **Step 3: Run the test and verify it fails**
 
 Run:
 
@@ -114,7 +114,7 @@ python -m pytest tests/test_health.py -v
 
 Expected: fail because `app.main` does not exist.
 
-- [ ] **Step 4: Implement app settings and health route**
+- [x] **Step 4: Implement app settings and health route**
 
 Create `apps/api/app/core/config.py`:
 
@@ -161,7 +161,7 @@ def create_app() -> FastAPI:
 app = create_app()
 ```
 
-- [ ] **Step 5: Run the test and verify it passes**
+- [x] **Step 5: Run the test and verify it passes**
 
 Run:
 
@@ -172,7 +172,7 @@ python -m pytest tests/test_health.py -v
 
 Expected: `1 passed`.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add apps/api/pyproject.toml apps/api/app apps/api/tests/test_health.py
@@ -188,7 +188,7 @@ git commit -m "feat: add api health skeleton"
 - Create: `apps/api/app/models.py`
 - Create: `apps/api/tests/test_database_models.py`
 
-- [ ] **Step 1: Write model persistence tests**
+- [x] **Step 1: Write model persistence tests**
 
 Create `apps/api/tests/test_database_models.py`:
 
@@ -229,7 +229,7 @@ def test_project_phase_model_config_and_job_persist(tmp_path: Path):
         assert session.query(Job).one().kind == "phase"
 ```
 
-- [ ] **Step 2: Run the test and verify it fails**
+- [x] **Step 2: Run the test and verify it fails**
 
 Run:
 
@@ -240,7 +240,7 @@ python -m pytest tests/test_database_models.py -v
 
 Expected: fail because database and models modules do not exist.
 
-- [ ] **Step 3: Implement database utilities**
+- [x] **Step 3: Implement database utilities**
 
 Create `apps/api/app/core/database.py`:
 
@@ -276,7 +276,7 @@ def session_scope(engine: Engine) -> Iterator[Session]:
         session.close()
 ```
 
-- [ ] **Step 4: Implement SQLAlchemy models**
+- [x] **Step 4: Implement SQLAlchemy models**
 
 Create `apps/api/app/models.py`:
 
@@ -376,7 +376,7 @@ class Generation(Base):
     error_message: Mapped[str | None] = mapped_column(Text, nullable=True)
 ```
 
-- [ ] **Step 5: Run the tests and verify they pass**
+- [x] **Step 5: Run the tests and verify they pass**
 
 Run:
 
@@ -387,7 +387,7 @@ python -m pytest tests/test_database_models.py tests/test_health.py -v
 
 Expected: all tests pass.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add apps/api/app/core/database.py apps/api/app/models.py apps/api/tests/test_database_models.py
@@ -402,7 +402,7 @@ git commit -m "feat: add workbench database models"
 - Create: `apps/api/app/services/storage.py`
 - Create: `apps/api/tests/test_storage.py`
 
-- [ ] **Step 1: Write storage tests**
+- [x] **Step 1: Write storage tests**
 
 Create `apps/api/tests/test_storage.py`:
 
@@ -431,7 +431,7 @@ def test_create_project_structure_writes_expected_dirs_and_novel(tmp_path: Path)
         assert (result.project_dir / relative_dir).is_dir()
 ```
 
-- [ ] **Step 2: Run the test and verify it fails**
+- [x] **Step 2: Run the test and verify it fails**
 
 Run:
 
@@ -442,7 +442,7 @@ python -m pytest tests/test_storage.py -v
 
 Expected: fail because `app.services.storage` does not exist.
 
-- [ ] **Step 3: Implement storage service**
+- [x] **Step 3: Implement storage service**
 
 Create `apps/api/app/services/storage.py`:
 
@@ -503,7 +503,7 @@ def create_project_structure(
     return ProjectStructure(slug=slug, project_dir=project_dir, novel_path=novel_path)
 ```
 
-- [ ] **Step 4: Run the storage tests**
+- [x] **Step 4: Run the storage tests**
 
 Run:
 
@@ -514,7 +514,7 @@ python -m pytest tests/test_storage.py -v
 
 Expected: all tests pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/api/app/services/storage.py apps/api/tests/test_storage.py
@@ -529,7 +529,7 @@ git commit -m "feat: add project artifact storage"
 - Create: `apps/api/app/services/key_vault.py`
 - Create: `apps/api/tests/test_key_vault.py`
 
-- [ ] **Step 1: Write encryption tests**
+- [x] **Step 1: Write encryption tests**
 
 Create `apps/api/tests/test_key_vault.py`:
 
@@ -553,7 +553,7 @@ def test_decrypt_secret_rejects_wrong_master_password():
         decrypt_secret("wrong-pass", encrypted)
 ```
 
-- [ ] **Step 2: Run the test and verify it fails**
+- [x] **Step 2: Run the test and verify it fails**
 
 Run:
 
@@ -564,7 +564,7 @@ python -m pytest tests/test_key_vault.py -v
 
 Expected: fail because `app.services.key_vault` does not exist.
 
-- [ ] **Step 3: Implement key vault**
+- [x] **Step 3: Implement key vault**
 
 Create `apps/api/app/services/key_vault.py`:
 
@@ -621,7 +621,7 @@ def decrypt_secret(master_password: str, encrypted: EncryptedSecret) -> str:
         raise ValueError("Unable to decrypt API key") from exc
 ```
 
-- [ ] **Step 4: Run the key vault tests**
+- [x] **Step 4: Run the key vault tests**
 
 Run:
 
@@ -632,7 +632,7 @@ python -m pytest tests/test_key_vault.py -v
 
 Expected: all tests pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/api/app/services/key_vault.py apps/api/tests/test_key_vault.py
@@ -649,7 +649,7 @@ git commit -m "feat: add encrypted api key vault"
 - Modify: `apps/api/app/main.py`
 - Create: `apps/api/tests/test_projects_api.py`
 
-- [ ] **Step 1: Write project API tests**
+- [x] **Step 1: Write project API tests**
 
 Create `apps/api/tests/test_projects_api.py`:
 
@@ -684,7 +684,7 @@ def test_create_and_list_project(tmp_path: Path, monkeypatch):
     assert list_response.json()[0]["slug"] == "demo-project"
 ```
 
-- [ ] **Step 2: Run the test and verify it fails**
+- [x] **Step 2: Run the test and verify it fails**
 
 Run:
 
@@ -695,7 +695,7 @@ python -m pytest tests/test_projects_api.py -v
 
 Expected: fail because project router does not exist.
 
-- [ ] **Step 3: Implement schemas**
+- [x] **Step 3: Implement schemas**
 
 Create `apps/api/app/schemas.py`:
 
@@ -713,7 +713,7 @@ class ProjectResponse(BaseModel):
     model_config = {"from_attributes": True}
 ```
 
-- [ ] **Step 4: Implement projects router**
+- [x] **Step 4: Implement projects router**
 
 Create `apps/api/app/routers/projects.py`:
 
@@ -782,7 +782,7 @@ async def create_project(
         return project
 ```
 
-- [ ] **Step 5: Register router**
+- [x] **Step 5: Register router**
 
 Modify `apps/api/app/main.py`:
 
@@ -806,7 +806,7 @@ def create_app() -> FastAPI:
 app = create_app()
 ```
 
-- [ ] **Step 6: Run project API tests**
+- [x] **Step 6: Run project API tests**
 
 Run:
 
@@ -817,7 +817,7 @@ python -m pytest tests/test_projects_api.py tests/test_storage.py tests/test_dat
 
 Expected: all tests pass.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add apps/api/app/schemas.py apps/api/app/routers/projects.py apps/api/app/main.py apps/api/tests/test_projects_api.py
@@ -835,7 +835,7 @@ git commit -m "feat: add project upload api"
 - Modify: `apps/api/app/main.py`
 - Create: `apps/api/tests/test_phase_runner.py`
 
-- [ ] **Step 1: Write phase runner tests**
+- [x] **Step 1: Write phase runner tests**
 
 Create `apps/api/tests/test_phase_runner.py`:
 
@@ -865,7 +865,7 @@ def test_phase_runner_sets_needs_review_and_marks_downstream_stale(tmp_path: Pat
     assert state.downstream_status == {"phase1_5": "stale", "phase2a": "stale", "phase2b": "stale", "audit_gate": "stale", "final": "stale"}
 ```
 
-- [ ] **Step 2: Run the test and verify it fails**
+- [x] **Step 2: Run the test and verify it fails**
 
 Run:
 
@@ -876,7 +876,7 @@ python -m pytest tests/test_phase_runner.py -v
 
 Expected: fail because executor and phase runner modules do not exist.
 
-- [ ] **Step 3: Implement executor contracts**
+- [x] **Step 3: Implement executor contracts**
 
 Create `apps/api/app/services/executors.py`:
 
@@ -897,7 +897,7 @@ class PhaseExecutor(Protocol):
         raise NotImplementedError
 ```
 
-- [ ] **Step 4: Implement phase runner**
+- [x] **Step 4: Implement phase runner**
 
 Create `apps/api/app/services/phase_runner.py`:
 
@@ -939,7 +939,7 @@ class PhaseRunner:
         )
 ```
 
-- [ ] **Step 5: Add phase router endpoint for the future UI**
+- [x] **Step 5: Add phase router endpoint for the future UI**
 
 Create `apps/api/app/routers/phases.py`:
 
@@ -982,7 +982,7 @@ def create_app() -> FastAPI:
 app = create_app()
 ```
 
-- [ ] **Step 6: Run phase runner tests**
+- [x] **Step 6: Run phase runner tests**
 
 Run:
 
@@ -993,7 +993,7 @@ python -m pytest tests/test_phase_runner.py tests/test_health.py -v
 
 Expected: all tests pass.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add apps/api/app/services/executors.py apps/api/app/services/phase_runner.py apps/api/app/routers/phases.py apps/api/app/main.py apps/api/tests/test_phase_runner.py
@@ -1008,7 +1008,7 @@ git commit -m "feat: add phase runner state machine"
 - Modify: `apps/api/app/services/executors.py`
 - Create: `apps/api/tests/test_executors.py`
 
-- [ ] **Step 1: Write executor tests**
+- [x] **Step 1: Write executor tests**
 
 Create `apps/api/tests/test_executors.py`:
 
@@ -1055,7 +1055,7 @@ def test_cli_phase_executor_captures_script_output(tmp_path: Path, monkeypatch):
     assert result.output_files["StoryIR"].endswith("StoryIR.md")
 ```
 
-- [ ] **Step 2: Run the test and verify it fails**
+- [x] **Step 2: Run the test and verify it fails**
 
 Run:
 
@@ -1066,7 +1066,7 @@ python -m pytest tests/test_executors.py -v
 
 Expected: fail because concrete executors are not defined.
 
-- [ ] **Step 3: Implement concrete executors**
+- [x] **Step 3: Implement concrete executors**
 
 Modify `apps/api/app/services/executors.py`:
 
@@ -1140,7 +1140,7 @@ class CliPhaseExecutor:
         return ExecutionResult(output_files={label: str(output_path)}, log_excerpt=completed.stdout[-2000:])
 ```
 
-- [ ] **Step 4: Run executor tests**
+- [x] **Step 4: Run executor tests**
 
 Run:
 
@@ -1151,7 +1151,7 @@ python -m pytest tests/test_executors.py tests/test_phase_runner.py -v
 
 Expected: all tests pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/api/app/services/executors.py apps/api/tests/test_executors.py
@@ -1168,7 +1168,7 @@ git commit -m "feat: add api and cli phase executors"
 - Modify: `apps/api/app/main.py`
 - Create: `apps/api/tests/test_image_generation.py`
 
-- [ ] **Step 1: Write image generation tests**
+- [x] **Step 1: Write image generation tests**
 
 Create `apps/api/tests/test_image_generation.py`:
 
@@ -1199,7 +1199,7 @@ def test_image_generator_saves_base64_png(tmp_path: Path):
     assert output.read_bytes() == png_bytes
 ```
 
-- [ ] **Step 2: Run the test and verify it fails**
+- [x] **Step 2: Run the test and verify it fails**
 
 Run:
 
@@ -1210,7 +1210,7 @@ python -m pytest tests/test_image_generation.py -v
 
 Expected: fail because image generation module does not exist.
 
-- [ ] **Step 3: Implement image generator**
+- [x] **Step 3: Implement image generator**
 
 Create `apps/api/app/services/image_generation.py`:
 
@@ -1242,7 +1242,7 @@ class OpenAICompatibleImageGenerator:
         return output_path
 ```
 
-- [ ] **Step 4: Add assets router contract**
+- [x] **Step 4: Add assets router contract**
 
 Create `apps/api/app/routers/assets.py`:
 
@@ -1284,7 +1284,7 @@ def create_app() -> FastAPI:
 app = create_app()
 ```
 
-- [ ] **Step 5: Run image tests**
+- [x] **Step 5: Run image tests**
 
 Run:
 
@@ -1295,7 +1295,7 @@ python -m pytest tests/test_image_generation.py tests/test_health.py -v
 
 Expected: all tests pass.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add apps/api/app/services/image_generation.py apps/api/app/routers/assets.py apps/api/app/main.py apps/api/tests/test_image_generation.py
