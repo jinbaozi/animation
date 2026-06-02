@@ -1712,7 +1712,7 @@ git commit -m "feat: add web project list skeleton"
 - Create: `apps/web/src/components/PhaseTimeline.tsx`
 - Create: `apps/web/src/__tests__/WorkbenchPages.test.tsx`
 
-- [ ] **Step 1: Write workbench page tests**
+- [x] **Step 1: Write workbench page tests**
 
 Create `apps/web/src/__tests__/WorkbenchPages.test.tsx`:
 
@@ -1746,7 +1746,7 @@ describe("Workbench pages", () => {
 });
 ```
 
-- [ ] **Step 2: Implement phase timeline**
+- [x] **Step 2: Implement phase timeline**
 
 Create `apps/web/src/components/PhaseTimeline.tsx`:
 
@@ -1766,7 +1766,7 @@ export function PhaseTimeline() {
 }
 ```
 
-- [ ] **Step 3: Implement workbench pages**
+- [x] **Step 3: Implement workbench pages**
 
 Create `apps/web/src/pages/ProjectWorkbenchPage.tsx`:
 
@@ -1848,7 +1848,7 @@ export function ModelSettingsPage() {
 }
 ```
 
-- [ ] **Step 4: Run frontend tests**
+- [x] **Step 4: Run frontend tests**
 
 Run:
 
@@ -1859,7 +1859,7 @@ npm test
 
 Expected: all frontend tests pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/web/src/pages apps/web/src/components apps/web/src/__tests__/WorkbenchPages.test.tsx
