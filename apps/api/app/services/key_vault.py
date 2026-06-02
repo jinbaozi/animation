@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 import base64
+import binascii
 import os
 
 from cryptography.exceptions import InvalidTag
@@ -41,10 +42,10 @@ def encrypt_secret(master_password: str, secret: str) -> EncryptedSecret:
 
 def decrypt_secret(master_password: str, encrypted: EncryptedSecret) -> str:
     try:
-        salt = base64.b64decode(encrypted.salt)
-        nonce = base64.b64decode(encrypted.nonce)
-        ciphertext = base64.b64decode(encrypted.ciphertext)
+        salt = base64.b64decode(encrypted.salt, validate=True)
+        nonce = base64.b64decode(encrypted.nonce, validate=True)
+        ciphertext = base64.b64decode(encrypted.ciphertext, validate=True)
         key = _derive_key(master_password, salt)
         return AESGCM(key).decrypt(nonce, ciphertext, None).decode("utf-8")
-    except (InvalidTag, ValueError) as exc:
+    except (binascii.Error, InvalidTag, ValueError) as exc:
         raise ValueError("Unable to decrypt API key") from exc
