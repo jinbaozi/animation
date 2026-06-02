@@ -1874,7 +1874,7 @@ git commit -m "feat: add workbench page skeletons"
 - Create: `docs/web-workbench.md`
 - Modify: `README.md` if it exists after this plan starts; if it does not exist, do not create it in this task.
 
-- [ ] **Step 1: Write local run guide**
+- [x] **Step 1: Write local run guide**
 
 Create `docs/web-workbench.md`:
 
@@ -1914,7 +1914,7 @@ npm run dev
 文本链路支持模型 API 执行器和本地 CLI 执行器。图片生成走 OpenAI-Compatible 图片接口。视频第一版导出 `video-tasks.json` 与 `video-tasks.csv`，不要求自动生成视频。
 ````
 
-- [ ] **Step 2: Run backend tests**
+- [x] **Step 2: Run backend tests**
 
 Run:
 
@@ -1925,7 +1925,7 @@ python -m pytest -v
 
 Expected: all backend tests pass.
 
-- [ ] **Step 3: Run frontend tests**
+- [x] **Step 3: Run frontend tests**
 
 Run:
 
@@ -1936,7 +1936,7 @@ npm test
 
 Expected: all frontend tests pass.
 
-- [ ] **Step 4: Run frontend build**
+- [x] **Step 4: Run frontend build**
 
 Run:
 
@@ -1947,7 +1947,7 @@ npm run build
 
 Expected: TypeScript and Vite build complete successfully.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add docs/web-workbench.md
