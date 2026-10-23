@@ -1,0 +1,99 @@
+From 385a0df05c433c58713bb281c7a8ce056f9a7339 Mon Sep 17 00:00:00 2001
+From: Cursor Agent <cursoragent@cursor.com>
+Date: Fri, 23 Oct 2026 07:31:41 +0000
+Subject: [PATCH] Fix bugs in early-break patch
+
+1. Fix variable shadowing bug in vect_transform_loop: inner 'edge e' declaration
+   in else block shadowed the outer 'edge e = NULL', leaving e = NULL for
+   subsequent code when flag_early_break is false.
+
+2. Remove debug fprintf(stderr,...) statements left in tree-vect-loop.cc.
+
+3. Fix cunroll crash: Revert tree-loop-distribution.cc to always use the
+   original 3-parameter slpeel_tree_duplicate_loop_to_edge_cfg. The new
+   8-parameter overload is designed for the vectorizer's early-break handling
+   and does not work correctly when called from loop distribution with
+   flow_loops=false. Using it in loop distribution corrupts the CFG,
+   causing segfaults in update_ssa -> compute_dominance_frontiers during
+   subsequent cunroll pass (affects 521.wrf_r, 527.cam4_r, 621.wrf_s,
+   627.cam4_s, 628.pop2_s).
+---
+ gcc/tree-loop-distribution.cc | 10 +---------
+ gcc/tree-vect-loop.cc         |  7 +------
+ 2 files changed, 2 insertions(+), 15 deletions(-)
+
+diff --git a/gcc/tree-loop-distribution.cc b/gcc/tree-loop-distribution.cc
+index ae659ddeb..75526ecde 100644
+--- a/gcc/tree-loop-distribution.cc
++++ b/gcc/tree-loop-distribution.cc
+@@ -948,15 +948,7 @@ copy_loop_before (class loop *loop)
+   edge preheader = loop_preheader_edge (loop);
+ 
+   initialize_original_copy_tables ();
+-  if (flag_early_break)
+-  {
+-    res = slpeel_tree_duplicate_loop_to_edge_cfg(loop, single_exit(loop), NULL,
+-                                                 NULL, preheader, NULL, false);
+-  }
+-  else
+-  {
+-    res = slpeel_tree_duplicate_loop_to_edge_cfg(loop, NULL, preheader);
+-  }
++  res = slpeel_tree_duplicate_loop_to_edge_cfg (loop, NULL, preheader);
+ 
+   gcc_assert (res != NULL);
+   free_original_copy_tables ();
+diff --git a/gcc/tree-vect-loop.cc b/gcc/tree-vect-loop.cc
+index 4ae0b2088..b76ce3c61 100644
+--- a/gcc/tree-vect-loop.cc
++++ b/gcc/tree-vect-loop.cc
+@@ -11060,7 +11060,6 @@ static bool
+ vect_transform_loop_stmt (loop_vec_info loop_vinfo, stmt_vec_info stmt_info,
+ 			  gimple_stmt_iterator *gsi, stmt_vec_info *seen_store)
+ {
+-//  fprintf(stderr,"[vect_transform_loop_stmt] stmt type is %d\n",STMT_VINFO_TYPE (stmt_info));
+   class loop *loop = LOOP_VINFO_LOOP (loop_vinfo);
+   poly_uint64 vf = LOOP_VINFO_VECT_FACTOR (loop_vinfo);
+ 
+@@ -11392,7 +11391,7 @@ vect_transform_loop (loop_vec_info loop_vinfo, gimple *loop_vectorized_call)
+   }
+   else
+   {
+-    edge e = single_exit(loop);
++    e = single_exit(loop);
+     if (!single_pred_p(e->dest))
+     {
+       split_loop_exit_edge(e, true);
+@@ -11587,7 +11586,6 @@ vect_transform_loop (loop_vec_info loop_vinfo, gimple *loop_vectorized_call)
+ 	      stmt_vec_info seen_store = NULL;
+ 	      if (stmt_info)
+ 		{
+-//      fprintf(stderr,"[vect_transform_loop] stmt_info type is %d\n",STMT_VINFO_TYPE (stmt_info));
+ 		  if (STMT_VINFO_IN_PATTERN_P (stmt_info))
+ 		    {
+ 		      gimple *def_seq = STMT_VINFO_PATTERN_DEF_SEQ (stmt_info);
+@@ -11596,13 +11594,11 @@ vect_transform_loop (loop_vec_info loop_vinfo, gimple *loop_vectorized_call)
+           {
+             stmt_vec_info pat_stmt_info
+               = loop_vinfo->lookup_stmt (gsi_stmt (subsi));
+-//            fprintf(stderr,"[vect_transform_loop 1] pat_stmt_info type is %d\n",STMT_VINFO_TYPE (pat_stmt_info));
+             vect_transform_loop_stmt (loop_vinfo, pat_stmt_info,
+                     &si, &seen_store);
+           }
+           stmt_vec_info pat_stmt_info
+             = STMT_VINFO_RELATED_STMT (stmt_info);
+-//          fprintf(stderr,"[vect_transform_loop 2] pat_stmt_info type is %d\n",STMT_VINFO_TYPE (pat_stmt_info));
+           if (flag_early_break)
+           {
+             if (STMT_VINFO_TYPE(pat_stmt_info) == 0)
+@@ -11626,7 +11622,6 @@ vect_transform_loop (loop_vec_info loop_vinfo, gimple *loop_vectorized_call)
+         }
+ 		  else
+ 		    {
+-//          fprintf(stderr,"[vect_transform_loop 3] pat_stmt_info type is %d\n",STMT_VINFO_TYPE (stmt_info));
+ 		      if (vect_transform_loop_stmt (loop_vinfo, stmt_info, &si,
+ 						    &seen_store))
+ 			maybe_set_vectorized_backedge_value (loop_vinfo,
+-- 
+2.43.0
+
