@@ -1,0 +1,16 @@
+# Behavior-equivalent config template. Do not put a real password in this file.
+# database type: Oracle, DB2, MySQL, GoldenDB, Gauss, PG, GP, KB, DM, HIGHGO
+dbtype=MySQL
+log=
+tpslog=tps.log
+thread=1
+loop=20
+rate=1,0,0,0
+buffer=100
+url=jdbc:mysql://127.0.0.1:3306/tpcc?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8&useUnicode=yes
+username=tpccapp
+password=CHANGE_ME
+tablename=test
+tablespace=
+tablenum=1
+sql=

@@ -1,0 +1,47 @@
+--- a/src/main/java/com/cmbcdba/WorkLoadManager1.java
++++ b/src/main/java/com/cmbcdba/WorkLoadManager1.java
+@@ -251,7 +251,8 @@
+                                 this.stmt_sel.setInt(1, skey);
+                             }
+                             sstart = this.tm.getCurrentTimeNano();
+-                            this.stmt_sel.executeQuery();
++                            ResultSet queryRs = this.stmt_sel.executeQuery();
++                            queryRs.close();
+                             ++totalTrans;
+                             send = this.tm.getCurrentTimeNano();
+                             queryTime = (send - sstart) / 1000L;
+@@ -284,13 +285,6 @@
+             }
+             catch (Exception e) {
+                 e.printStackTrace();
+-                try {
+-                    loadRunner.sleep(10000L);
+-                }
+-                catch (InterruptedException interruptedException) {
+-                    // empty catch block
+-                }
+-                this.run();
+             }
+             finally {
+                 try {
+@@ -436,9 +430,18 @@
+                 catch (Exception exception) {
+                     // empty catch block
+                 }
+-                ResultSet rs = stmt.executeQuery("select count(*) from " + tableName + "_" + suffix);
++                String keyQuery = "select count(*) from " + tableName + "_" + suffix;
++                if (dbtype.equalsIgnoreCase("MySQL")) {
++                    keyQuery = "select count(*), ifnull(max(c1), -1) + 1 from " + tableName + "_" + suffix;
++                }
++                ResultSet rs = stmt.executeQuery(keyQuery);
+                 rs.next();
+-                this.currentKey = this.key = rs.getInt(1);
++                if (dbtype.equalsIgnoreCase("MySQL")) {
++                    this.currentKey = rs.getInt(1);
++                    this.key = rs.getInt(2);
++                } else {
++                    this.currentKey = this.key = rs.getInt(1);
++                }
+                 System.out.println(this.key);
+                 rs.close();
+                 stmt.close();
