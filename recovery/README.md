@@ -15,11 +15,16 @@
 
 ## 构建
 
+在 `recovery/reconstructed/` 用 Maven 打出和原部署物同名的可执行包。依赖是 MySQL Connector/J 5.1.46，字节码目标是 JDK 8，主类是 `com.cmbcdba.WorkLoadManager1`。
+
 ```bash
-recovery/reconstructed/build.sh
+mvn -f recovery/reconstructed/pom.xml -B package
+java -jar recovery/reconstructed/target/WorkLoadManagerNew-1.0-jar-with-dependencies.jar /path/to/application.properties
 ```
 
-类输出在 `recovery/reconstructed/build/classes`。该目录是本地产物，不需要提交。
+`recovery/reconstructed/build.sh` 只编译 class，不打包。`target/` 是本地产物。
+
+已在本机 MySQL 8.0.31（`127.0.0.1:3306`，库 `tpcc`）上用这个 fat jar 跑通。空表、单进程、`thread=1`：插入 30 行、点查 10 次、更新并删除各 5 次，退出码都是 0，输出都有 `End`，没有 `Exception`。记录在 `evidence/mysql-8.0.31/`。用户使用 `mysql_native_password`，因为原程序带的是 Connector/J 5.1.46。
 
 ## 运行
 

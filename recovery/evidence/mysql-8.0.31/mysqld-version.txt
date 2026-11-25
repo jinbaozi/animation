@@ -1,0 +1,1 @@
+/usr/local/mysql/bin/mysqld  Ver 8.0.31 for Linux on x86_64 (Source distribution)
