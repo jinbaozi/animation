@@ -1,0 +1,11 @@
+empty_equiv_elapsed 1.365 duplicate False
+empty_fix_elapsed 1.376 duplicate False
+sparse_jar_elapsed 10.362 duplicate True
+sparse_equiv_elapsed 10.365 duplicate True end True
+sparse_fix_elapsed 1.413 duplicate False
+empty_equiv_sql c mn mx 20 0 19
+empty_fix_sql c mn mx 20 0 19
+sparse_equiv_sql c mn mx 110 1 160
+sparse_fix_sql c mn mx 61 50 110
+select_fix_end True
+select_fix_error False

@@ -1,0 +1,66 @@
+#!/bin/bash
+
+
+#usage: sh benchmark.sh > workload.log 2>&1 &
+
+OPLIST='insert'
+CONFIG='application.properties'
+JARFILE='WorkLoadManagerNew-jar-with-dependencies.jar'
+thread='100'
+LOADFILE='systemload.log'
+
+for op in `echo $OPLIST`
+do
+    if [ $op == "insert" ];then
+        ratelist='1,0,0,0'
+    elif [ $op == "select" ];then
+        ratelist='0,0,0,1'
+    else
+        echo "unrecorgnize operate-type... $op, not in $OPLIST"
+        exit 1
+    fi
+
+    for tid in `echo $thread`
+    do
+        echo "begin benchmark thread $tid $op..."
+        tpsfile="tps\_$op\_$tid.log"
+	timelog="time.log"
+        [ -f $tpsfile ] && rm -rf $tpsfile
+        [ -f $timelog ] && rm -rf $timelog
+
+        echo "begin modify $CONFIG..."
+        sed -i "/^tpslog/s/\(.*\)=\(.*\)/\1=$tpsfile/g" $CONFIG
+        sed -i "/^rate/s/\(.*\)=\(.*\)/\1=$ratelist/g" $CONFIG
+        sed -i "/^thread/s/\(.*\)=\(.*\)/\1=$tid/g" $CONFIG
+
+        echo "begin truncate table ..."
+        if [ $op == "insert" ];then
+           /usr/local/mysql/bin/mysql -utpccapp -h localhost -p'REDACTED' -e "use tpcc;truncate table test_1;reset master;"
+        fi
+
+	#echo "begin truncate table ..."	
+	#if [ "$op" = "insert" ]; then
+        #    for i in {1..10}; do
+        #         mysql -utpccapp -p'REDACTED' -e "use tpcc;truncate table test_$i;"
+        #    done
+        #mysql -utpccapp -p'REDACTED' -e "reset master;"
+        #fi
+
+        echo "call benchmark program..."
+        echo "benchmark thread $tid $op..." >> $LOADFILE
+        nohup java -Xms1024m -Xmx2048m -jar $JARFILE $CONFIG &
+        sleep 10
+        checkjava='ps -ef | grep java | grep -v grep | wc -l'
+        #if [ `eval $checkjava` -eq 1 ];then
+        #    nohup mpstat 5 2 >> $LOADFILE
+        #    nohup iostat -x 5 2 | grep sda >> $LOADFILE
+        #fi
+
+        while [ `eval $checkjava` -eq 1 ];do
+            sleep 1
+        done
+
+        echo "end benchmark thread $tid $op..."
+        #sleep 60
+    done
+done
