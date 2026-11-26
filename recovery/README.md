@@ -11,7 +11,7 @@
 | `fix/` | 可单独打上和回退的性能补丁 | 稀疏主键复测已通过 |
 | `evidence/` | 哈希、部署链路、字节码摘录、本次运行日志 | 上传包副本在 `materials/`。口令和内网地址已替换为占位符 |
 
-适用环境：JDK 8 或更高版本上的 `javac --release 8`，以及 MySQL Connector/J 5（已放在 `reconstructed/lib-mysql-connector.jar`）。运行需要一个可连接的 MySQL 兼容库。本机对照使用 MariaDB 10.11，端口 3307。原来的 MySQL 8.0.31 源码安装未验证。
+适用环境：JDK 8 或更高版本，字节码目标 1.8。JDK 8 的 `javac` 没有 `--release`，所以 Maven 使用 `source`/`target` 1.8。依赖是 MySQL Connector/J 5（已放在 `reconstructed/lib-mysql-connector.jar`）。运行需要一个可连接的 MySQL 兼容库。
 
 ## 构建
 
